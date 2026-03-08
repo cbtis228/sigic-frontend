@@ -1,0 +1,307 @@
+<div class="min-h-screen p-4">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header Principal con información del ciclo -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+      >
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-3xl font-bold text-gray-800">
+              Gestión de Inscripciones
+            </h1>
+            <span
+              *ngIf="cicloEscolar"
+              class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full"
+            >
+              {{ cicloEscolar.nombre_ciclo }}
+            </span>
+          </div>
+          <p class="text-gray-600 mt-2">
+            Administra las inscripciones de alumnos a grupos
+          </p>
+
+          <div
+            *ngIf="cicloEscolar"
+            class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500"
+          >
+            <div class="flex items-center">
+              <i class="pi pi-calendar mr-1"></i>
+              <span
+                >Inicio:
+                {{ cicloEscolar.fecha_inicio | date: "dd/MM/yyyy" }}</span
+              >
+            </div>
+            <div class="flex items-center">
+              <i class="pi pi-calendar-times mr-1"></i>
+              <span
+                >Fin: {{ cicloEscolar.fecha_fin | date: "dd/MM/yyyy" }}</span
+              >
+            </div>
+            <div class="flex items-center">
+              <i
+                class="pi pi-circle-fill mr-1"
+                [ngClass]="{
+                  'text-green-500': cicloEscolar.estatus === 1,
+                  'text-gray-500': cicloEscolar.estatus === 0,
+                }"
+              ></i>
+              <span>{{
+                cicloEscolar.estatus === 1 ? "Activo" : "Inactivo"
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full md:w-1/4 flex flex-wrap gap-3">
+          <button
+            *ngIf="permissionsService.has$('academico.add_inscripcion') | async"
+            pButton
+            severity="info"
+            icon="pi pi-user-plus"
+            class="w-full"
+            (click)="showCreateInscripcionDialog = true"
+          >
+            Nueva Inscripción
+          </button>
+
+          <p-select
+            id="id"
+            class="w-full"
+            [(ngModel)]="cicloEscolar"
+            (onChange)="onCicloChange()"
+            optionLabel="nombre_ciclo"
+            placeholder="Seleccione un ciclo escolar"
+            [filter]="true"
+            [options]="ciclosEscolares"
+          >
+          </p-select>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="permissionsService.has$('academico.add_inscripcion') | async"
+      class="bg-white rounded-2xl shadow-xl p-6 space-y-8 mb-6"
+    >
+      <!-- Título -->
+      <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="pi pi-users text-blue-500"></i>
+        Inscripción Masiva
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Panel de carga con PrimeNG FileUpload -->
+        <div class="flex flex-col space-y-4">
+          <p-fileUpload
+            #fileUpload
+            name="csvFile"
+            mode="advanced"
+            [auto]="false"
+            [customUpload]="true"
+            accept=".csv"
+            maxFileSize="5000000"
+            chooseLabel="Seleccionar CSV"
+            uploadLabel="Subir"
+            cancelLabel="Cancelar"
+            class="w-full rounded-xl"
+            (uploadHandler)="onUpload($event)"
+          >
+            <ng-template pTemplate="content">
+              <div
+                class="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors"
+              >
+                <i class="pi pi-cloud-upload text-5xl text-blue-400 mb-4"></i>
+                <h3 class="font-semibold text-gray-700 mb-1">
+                  Cargar Archivo CSV
+                </h3>
+                <p class="text-gray-500 text-sm">
+                  Arrastra tu archivo o haz clic en
+                  <strong>Seleccionar CSV</strong>
+                </p>
+                <p class="text-xs text-gray-400 mt-2">
+                  Formatos aceptados: .csv (máx. 5 MB)
+                </p>
+              </div>
+            </ng-template>
+          </p-fileUpload>
+        </div>
+
+        <!-- Panel de información / plantilla -->
+        <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-between">
+          <div>
+            <h3
+              class="text-lg font-semibold text-blue-800 mb-3 flex items-center gap-2"
+            >
+              <i class="pi pi-file"></i> Formato Requerido
+            </h3>
+
+            <p class="text-blue-700 text-sm mb-4" *ngIf="cicloEscolar">
+              Inscripciones para el ciclo
+              <strong>{{ cicloEscolar.nombre_ciclo }}</strong>
+            </p>
+
+            <div class="bg-white rounded-lg p-4 mb-4 border border-blue-100">
+              <div class="text-xs font-mono text-gray-700 space-y-1">
+                <div class="font-semibold">Encabezado CSV:</div>
+                <div>
+                  numero_control, grupo_id, fecha_inscripcion, observaciones
+                </div>
+                <div class="mt-2 font-semibold">Ejemplo:</div>
+                <div>2500381, 3, 2025-05-10, Alumno regular sin adeudos</div>
+                <div>2501773, 3, 2025-05-11, Reinscripción tardía</div>
+                <div>2501988, 3, 2025-05-12, Nuevo ingreso</div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-download"
+            label="Descargar Plantilla"
+            class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg mt-4 transition-colors"
+            (click)="downloadTemplate()"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-5 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="md:col-span-3">
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >🔍 Búsqueda Global</label
+          >
+          <div class="relative">
+            <input
+              pInputText
+              [(ngModel)]="globalFilter"
+              type="text"
+              placeholder="Buscar alumno, grupo, matrícula..."
+              class="w-full"
+            />
+          </div>
+        </div>
+
+        <!-- Filtro por Estatus -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2"
+            >📊 Estatus</label
+          >
+          <p-select
+            class="w-full"
+            [(ngModel)]="estatusFilter"
+            [options]="estatuses"
+          >
+          </p-select>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-4">
+        <button
+          class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+          (click)="globalFilter = ''; estatusFilter = null; loadInscripciones()"
+        >
+          Limpiar Filtros
+        </button>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          (click)="loadInscripciones()"
+        >
+          Aplicar Filtros
+        </button>
+      </div>
+    </div>
+    <!-- Lista de Inscripciones -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-gray-800">
+          📝 Inscripciones Registradas
+        </h2>
+        <span class="text-sm text-gray-500" *ngIf="cicloEscolar">
+          Mostrando inscripciones del ciclo {{ cicloEscolar!.nombre_ciclo }}
+        </span>
+      </div>
+
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+      >
+        <div
+          *ngFor="let inscripcion of inscripcionesData?.results"
+          class="h-full w-full"
+        >
+          <app-alumno-inscripcion-card
+            (onDetailClick)="onDetailInscripcionClick($event)"
+            (onDeactivateClick)="onDeactivateInscripcionClick($event)"
+            (onActivateClick)="onActivateInscripcionClick($event)"
+            [inscripcion]="inscripcion"
+          >
+          </app-alumno-inscripcion-card>
+        </div>
+        <div
+          *ngIf="inscripcionesData?.results?.length === 0"
+          class="col-span-full flex flex-col items-center justify-center p-8 text-center mt-4"
+        >
+          <div class="mb-4 text-blue-500">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-700 mb-2">
+            No hay inscripciones
+          </h3>
+          <p class="text-gray-500 max-w-md">
+            Aún no tienes ninguna inscripción registrada. Cuando tengas
+            inscripciones, aparecerán aquí.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-center mt-8">
+        <p-paginator
+          [first]="inscripcionesData?.offset || 0"
+          [rows]="10"
+          (onPageChange)="loadInscripciones($event)"
+          [totalRecords]="inscripcionesData?.count"
+          [rowsPerPageOptions]="[10, 20, 30]"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<app-alumno-inscripcion-create-dialog
+  [(visible)]="showCreateInscripcionDialog"
+  [cicloEscolar]="cicloEscolar"
+  (onInscripcionCreate)="onInscripcionCreate($event)"
+>
+</app-alumno-inscripcion-create-dialog>
+<app-alumno-inscripcion-detail-dialog
+  [(visible)]="showDetailInscripcionDialog"
+  [inscripcion]="selectedInscription!"
+></app-alumno-inscripcion-detail-dialog>
+<p-confirmdialog>
+  <ng-template #message>
+    <div class="flex flex-col items-center w-full gap-4 p-4">
+      <i class="pi pi-exclamation-triangle text-xl text-red-500"></i>
+      <h3 class="text-lg font-semibold text-gray-800">
+        ¿Suspender inscripción?
+      </h3>
+      <p class="text-center text-gray-600">
+        El alumno perderá acceso al grupo, materias y horario. Se liberará el
+        espacio para otro alumno.
+      </p>
+    </div>
+  </ng-template>
+</p-confirmdialog>

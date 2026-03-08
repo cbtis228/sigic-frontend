@@ -1,0 +1,184 @@
+<div
+  class="min-h-screen p-6 bg-gradient-to-b from-blue-50 via-white to-gray-50"
+>
+  <div class="max-w-6xl mx-auto space-y-10">
+    <!-- Header de Bienvenida -->
+    <div
+      class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 flex flex-col sm:flex-row items-center gap-8 relative overflow-hidden"
+    >
+      <!-- Decoración de fondo -->
+      <div
+        class="absolute -top-6 -right-6 w-32 h-32 bg-blue-100 rounded-full opacity-60 blur-2xl"
+      ></div>
+
+      <!-- Avatar -->
+      <div
+        class="w-24 h-24 bg-gradient-to-r from-brand-400 to-brand-500 rounded-2xl flex items-center justify-center shadow-md relative z-10"
+      >
+        <span
+          *ngIf="alumno; else skeletonAvatar"
+          class="text-3xl font-bold text-white"
+        >
+          {{ alumno!.nombres.charAt(0) }}{{ alumno!.paterno.charAt(0) }}
+        </span>
+        <ng-template #skeletonAvatar>
+          <div class="w-24 h-24 bg-gray-300 animate-pulse rounded-2xl"></div>
+        </ng-template>
+      </div>
+
+      <!-- Info -->
+      <div class="relative z-10 text-center sm:text-left">
+        <ng-container *ngIf="alumno; else skeletonInfo">
+          <p class="text-brand-500 text-sm font-medium mb-1">
+            ¡Bienvenido de nuevo!
+          </p>
+          <h1 class="text-3xl font-bold text-gray-800 leading-tight">
+            {{ alumno.nombres }} {{ alumno.paterno }} {{ alumno.materno }}
+          </h1>
+          <p class="text-gray-600 mt-1 text-sm">
+            Número de control:
+            <span class="font-semibold text-brand-600">{{
+              alumno!.numero_control
+            }}</span>
+          </p>
+        </ng-container>
+        <ng-template #skeletonInfo>
+          <div class="space-y-2">
+            <div class="h-4 bg-gray-300 rounded w-32 animate-pulse"></div>
+            <div class="h-6 bg-gray-300 rounded w-48 animate-pulse"></div>
+            <div class="h-4 bg-gray-300 rounded w-40 animate-pulse"></div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Grid de Accesos Rápidos -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ng-container *ngIf="alumno; else skeletonCards">
+        <!-- Mis Cursos -->
+        <app-card-button
+          [label]="'Mis cursos'"
+          [link]="'/dashboard'"
+          [loading]="!alumno"
+          [icon]="misCursosIcon"
+        ></app-card-button>
+        <ng-template #misCursosIcon>
+          <svg
+            class="w-7 h-7 text-brand-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+        </ng-template>
+
+        <!-- Mis Datos -->
+        <app-card-button
+          [label]="'Mis datos'"
+          [link]="'/alumno/data/general'"
+          [loading]="!alumno"
+          [icon]="misDatosIcon"
+        ></app-card-button>
+        <ng-template #misDatosIcon>
+          <svg
+            class="w-7 h-7 text-brand-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zm-4 7a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        </ng-template>
+
+        <!-- Boletas -->
+        <app-card-button
+          [label]="'Boletas'"
+          [link]="'#'"
+          [loading]="!alumno"
+          [icon]="boletasIcon"
+        ></app-card-button>
+        <ng-template #boletasIcon>
+          <svg
+            class="w-7 h-7 text-brand-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #skeletonCards>
+        <div class="h-24 bg-gray-300 rounded-lg animate-pulse"></div>
+        <div class="h-24 bg-gray-300 rounded-lg animate-pulse"></div>
+        <div class="h-24 bg-gray-300 rounded-lg animate-pulse"></div>
+      </ng-template>
+    </div>
+
+    <!-- Horario del Día -->
+    <div
+      class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
+    >
+      <div
+        class="px-6 py-4 bg-gradient-to-r from-brand-400 to-brand-500 text-white flex items-center justify-between"
+      >
+        <h2 class="text-lg font-semibold">Horario de hoy</h2>
+        <span class="text-sm opacity-90">{{
+          today | date: "EEEE, d MMMM"
+        }}</span>
+      </div>
+
+      <ng-container *ngIf="alumno; else skeletonHorario">
+        <ng-container *ngIf="todayHorario.length > 0; else emptyHorario">
+          <ul class="divide-y divide-gray-100 px-6 py-4">
+            <li
+              *ngFor="let horario of todayHorario"
+              class="py-3 flex justify-between text-sm hover:bg-brand-50 rounded-lg px-2 transition"
+            >
+              <span class="font-medium text-gray-700">{{
+                horario.asignacion_docente.materia?.nombre
+              }}</span>
+              <div class="text-gray-600 font-medium">
+                {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+                <span *ngIf="horario.salon" class="ml-2 text-brand-600 text-xs"
+                  >Aula {{ horario.salon.nombre }}</span
+                >
+              </div>
+            </li>
+          </ul>
+        </ng-container>
+        <ng-template #emptyHorario>
+          <div class="px-6 py-8 text-center text-gray-500 text-sm">
+            <i class="pi pi-calendar-times text-3xl text-gray-400 mb-2"></i>
+            <p>No tienes clases programadas para hoy.</p>
+          </div>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #skeletonHorario>
+        <div class="px-6 py-4 space-y-3">
+          <div class="h-4 bg-gray-300 rounded w-full animate-pulse"></div>
+          <div class="h-4 bg-gray-300 rounded w-5/6 animate-pulse"></div>
+          <div class="h-4 bg-gray-300 rounded w-4/6 animate-pulse"></div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

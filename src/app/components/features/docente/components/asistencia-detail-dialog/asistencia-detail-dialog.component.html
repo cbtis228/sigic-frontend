@@ -1,0 +1,90 @@
+<p-dialog
+  *ngIf="asistencia"
+  header="Detalles de Asistencia"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  [closable]="true"
+  [resizable]="false"
+  (onHide)="visibleChange.emit(false)"
+>
+  <div class="space-y-5 p-4">
+    <div class="border-b border-gray-200 pb-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">Alumno</h3>
+      <div class="grid grid-cols-2 gap-x-4 text-gray-700">
+        <p>
+          <span class="font-medium">No. Control:</span>
+          {{ asistencia.alumno.numero_control }}
+        </p>
+        <p>
+          <span class="font-medium">Nombre:</span>
+          {{ asistencia.alumno.nombres }} {{ asistencia.alumno.paterno }}
+          {{ asistencia.alumno.materno }}
+        </p>
+      </div>
+    </div>
+
+    <div class="border-b border-gray-200 pb-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">
+        Información Académica
+      </h3>
+      <div class="grid grid-cols-2 gap-x-4 text-gray-700">
+        <p>
+          <span class="font-medium">Grupo:</span>
+          {{ asistencia.horario.grupo!.nombre_grupo }}
+        </p>
+        <p>
+          <span class="font-medium">Materia:</span>
+          {{ asistencia.horario.asignacion_docente!.materia!.nombre }}
+        </p>
+        <p>
+          <span class="font-medium">Clave:</span>
+          {{ asistencia.horario.asignacion_docente!.materia!.clave }}
+        </p>
+      </div>
+    </div>
+
+    <div class="border-b border-gray-200 pb-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">
+        Registro de Asistencia
+      </h3>
+      <div class="grid grid-cols-2 gap-x-4 text-gray-700">
+        <p><span class="font-medium">Fecha:</span> {{ asistencia.fecha }}</p>
+        <p><span class="font-medium">Hora:</span> {{ asistencia.hora }}</p>
+        <p class="col-span-2">
+          <span class="font-medium">Tipo:</span>
+          <span
+            [ngClass]="{
+              'bg-green-100 text-green-800': asistencia.tipo == '1',
+              'bg-yellow-100 text-yellow-800': asistencia.tipo == '2',
+              'bg-red-100 text-red-800': asistencia.tipo == '3',
+              'bg-blue-100 text-blue-800': asistencia.tipo == '4',
+            }"
+            class="px-2 py-1 text-xs rounded-full ml-1"
+          >
+            {{ asistencia.tipo_display }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="asistencia.observaciones" class="pt-1">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">Observaciones</h3>
+      <p class="text-gray-700 border-l-4 border-gray-300 pl-3">
+        {{ asistencia.observaciones }}
+      </p>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end">
+      <button
+        pButton
+        type="button"
+        label="Cerrar"
+        class="p-button-text text-gray-700 hover:text-gray-900"
+        (click)="visibleChange.emit(false)"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

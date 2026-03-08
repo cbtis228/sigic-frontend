@@ -1,0 +1,25 @@
+<div class="evidencias-container">
+  <div
+    *ngIf="filesServicioSocial.length > 0; else emptyState"
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+  >
+    <div
+      *ngFor="let file of filesServicioSocial"
+    >
+      <app-file-card
+      [file]="file"
+      (onClickDelete)="confirmDelete(file)"
+      (onClickDownload)="onClickDownload.emit(file)"
+      [showDelete]="permissionService.has$('academico.view_fileserviciosocial') | async"
+      [showDownload]="permissionService.has$('academico.delete_fileserviciosocial') | async"
+      ></app-file-card>
+    </div>
+  </div>
+
+  <ng-template #emptyState>
+    <div class="text-center py-10 text-gray-500">
+      <i class="pi pi-folder-open text-4xl mb-3 block"></i>
+      <p class="text-sm">No hay archivos de evidencia cargados.</p>
+    </div>
+  </ng-template>
+</div>

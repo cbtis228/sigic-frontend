@@ -1,0 +1,357 @@
+<p-confirmdialog />
+
+<div class="min-h-screen p-4 md:p-6 bg-brand-50">
+  <div class="max-w-7xl mx-auto">
+    <div
+      class="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-brand-100"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+      >
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <div>
+              <h1 class="text-3xl font-bold text-brand-950">
+                Registro de Capacitaciones
+              </h1>
+              <p class="text-brand-700 text-sm mt-1">
+                Panel de administración docente
+              </p>
+            </div>
+          </div>
+          <p class="text-brand-600 mt-3 ml-1">
+            Gestiona y registra las capacitaciones docentes de forma organizada
+            y profesional
+          </p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <p-button
+            icon="pi pi-plus-circle"
+            severity="info"
+            label="Nueva Capacitacion"
+            (onClick)="visibleCapacitacionCreateDialog = true"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div
+        class="bg-white rounded-2xl shadow-md p-5 border border-brand-200 hover:border-brand-300 transition-all duration-300 hover:shadow-lg"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-brand-700 font-medium">
+              Total Capacitaciones
+            </p>
+            <p class="text-3xl font-bold text-brand-950 mt-2">
+              {{ totalCapacitaciones }}
+            </p>
+          </div>
+          <div class="p-3 bg-brand-100 rounded-xl">
+            <i class="pi pi-book text-brand-600 text-xl"></i>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-brand-100">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-arrow-up text-brand-500 text-sm"></i>
+            <span class="text-sm font-medium text-brand-600"
+              >+{{ totalCurrentMonthCapacitaciones }} este mes</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-2xl shadow-md p-5 border border-brand-200 hover:border-brand-300 transition-all duration-300 hover:shadow-lg"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-brand-700 font-medium">Horas Certificadas</p>
+            <p class="text-3xl font-bold text-brand-950 mt-2">
+              {{ totalCertificatedHours }}h
+            </p>
+          </div>
+          <div class="p-3 bg-blue-100 rounded-xl">
+            <i class="pi pi-clock text-blue-600 text-xl"></i>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-brand-100">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-chart-line text-brand-500 text-sm"></i>
+            <span class="text-sm font-medium text-brand-600"
+              >Promedio: {{ avarageCertificatedHours }}h/cap</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-2xl shadow-md p-5 border border-brand-200 hover:border-brand-300 transition-all duration-300 hover:shadow-lg"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-brand-700 font-medium">Pendientes</p>
+            <p class="text-3xl font-bold text-brand-950 mt-2">
+              {{ totalCompletedCapacitaciones }}
+            </p>
+          </div>
+          <div class="p-3 bg-amber-100 rounded-xl">
+            <i class="pi pi-hourglass text-amber-600 text-xl"></i>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-brand-100">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-exclamation-triangle text-amber-500 text-sm"></i>
+            <span class="text-sm font-medium text-amber-600"
+              >Por certificar</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-2xl shadow-md p-5 border border-brand-200 hover:border-brand-300 transition-all duration-300 hover:shadow-lg"
+      >
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-sm text-brand-700 font-medium">Completadas</p>
+            <p class="text-3xl font-bold text-brand-950 mt-2">
+              {{ totalCompletedCapacitaciones }}
+            </p>
+          </div>
+          <div class="p-3 bg-emerald-100 rounded-xl">
+            <i class="pi pi-verified text-emerald-600 text-xl"></i>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-brand-100">
+          <div class="flex items-center gap-2">
+            <i class="pi pi-check-circle text-emerald-500 text-sm"></i>
+            <span class="text-sm font-medium text-emerald-600"
+              >{{ percentajeOfCompletedCapacitaciones }}% completado</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-brand-100"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
+      >
+        <h3 class="text-xl font-bold text-brand-950 flex items-center gap-3">
+          <div class="p-2 bg-brand-100 rounded-lg">
+            <i class="pi pi-filter text-brand-600"></i>
+          </div>
+          Filtros
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="lg:col-span-3">
+          <label
+            class="text-sm font-medium text-brand-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-search text-brand-500"></i> Buscar capacitación
+          </label>
+          <div class="relative">
+            <input
+              pInputText
+              type="text"
+              placeholder="Título, institución, palabras clave..."
+              #search
+              (input)="dt.filterGlobal(search.value, 'contains')"
+              class="w-full pl-12 pr-2 py-3.5 border border-brand-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all bg-white placeholder:text-brand-400"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label
+            class="text-sm font-medium text-brand-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-tag text-brand-500"></i> Estado
+          </label>
+          <div class="relative">
+            <p-select
+              class="w-full"
+              showClear="true"
+              [(ngModel)]="selectedEstatus"
+              [options]="estatusCapacitacion"
+              (onChange)="
+                dt.filter(
+                  $event.value,
+                  'estatus_capacitacion',
+                  'equals'
+                )
+              "
+              (onClear)="dt.filter(null, 'estatus_capacitacion', 'equals')"
+            >
+            </p-select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="bg-white rounded-2xl shadow-lg overflow-hidden border border-brand-100"
+    >
+      <p-table
+        #dt
+        [value]="capacitacionesData"
+        [globalFilterFields]="[
+          'nombre',
+          'lugar',
+          'duracion',
+          'fecha_inicio',
+          'fecha_fin',
+          'tipo_display',
+          'estatus_capacitacion_display'
+        ]"
+        [totalRecords]="capacitacionesData.length"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+        currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} registros"
+      >
+        <ng-template #caption>
+          <div class="p-4 space-y-2">
+            <h1 class="text-2xl font-bold text-brand-950">
+              Capacitaciones Registradas
+            </h1>
+            <p class="text-brand-700 text-md mt-1">
+              Lista de capacitaciones personales del docente
+            </p>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="!bg-brand-50 !text-brand-800">Nombre</th>
+            <th class="!bg-brand-50 !text-brand-800">Duración</th>
+            <th class="!bg-brand-50 !text-brand-800">
+              Fecha Inicio - Fecha Fin
+            </th>
+            <th class="!bg-brand-50 !text-brand-800">Tipo</th>
+            <th class="!bg-brand-50 !text-brand-800">Estado Capacitación</th>
+            <th class="!bg-brand-50 !text-brand-800">Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-capacitacion>
+          <tr>
+            <td>
+              <div class="p-3 text-center rounded-xl bg-brand-100 shadow-sm">
+                <div class="text-sm font-semibold text-brand-900 leading-tight">
+                  {{ capacitacion.nombre }}
+                </div>
+
+                <div
+                  class="mt-1 text-xs text-brand-700 flex items-center justify-center gap-1"
+                >
+                  <i class="pi pi-map-marker"></i>
+                  <span>{{ capacitacion.lugar }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-200 text-purple-800 text-sm font-medium"
+              >
+                <i class="pi pi-clock text-purple-600"></i>
+                {{ capacitacion.duracion }} hrs
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="text-sm font-medium text-slate-900">
+                {{ capacitacion.fecha_inicio }} - {{ capacitacion.fecha_fin }}
+              </div>
+            </td>
+            <td>
+              <div
+                class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-sm font-medium"
+              >
+                <i class="pi pi-calendar text-xs"></i>
+                {{ capacitacion.tipo_display }}
+              </div>
+            </td>
+
+            <td class="text-sm text-gray-900">
+              <span
+                class="px-4 py-1 shadow-sm inline-flex text-xs leading-5 font-semibold rounded-full"
+                [ngClass]="
+                  getEstadoCapacitacionBadgeClass(
+                    capacitacion.estatus_capacitacion
+                  )
+                "
+              >
+                <i
+                  class="text-sm pr-2"
+                  [ngClass]="
+                    getEstadoCapacitacionIcon(capacitacion.estatus_capacitacion)
+                  "
+                ></i>
+                {{ capacitacion.estatus_capacitacion_display }}
+              </span>
+            </td>
+            <td>
+              <div class="flex items-center gap-2">
+                <p-menu
+                  #menu
+                  appendTo="body"
+                  [model]="menuItems"
+                  [popup]="true"
+                ></p-menu>
+
+                <p-button
+                  icon="pi pi-ellipsis-v"
+                  severity="secondary"
+                  [rounded]="true"
+                  [text]="true"
+                  (click)="updateMenuItems(capacitacion); menu.toggle($event)"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7" class="text-center py-8">
+              <div
+                class="flex flex-col items-center justify-center text-gray-500"
+              >
+                <i class="pi pi-inbox text-4xl mb-2"></i>
+                <p class="text-lg">No se encontraron registros</p>
+                <p class="text-sm">Intenta ajustar los filtros de búsqueda</p>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<app-capacitacion-create-dialog
+  [(visible)]="visibleCapacitacionCreateDialog"
+  (onCapacitacionCreate)="createCapacitacion($event)"
+></app-capacitacion-create-dialog>
+
+<app-capacitacion-edit-dialog
+  [(visible)]="visibleCapacitacionEditDialog"
+  [capacitacion]="selectedCapacitacion"
+  (onCapacitacionChange)="updateCapacitacion($event)"
+></app-capacitacion-edit-dialog>
+
+<app-capacitacion-files-dialog
+  [(visible)]="visibleCapacitacionEvidenciaDialog"
+  (uploadFile)="onUploadFile($event)"
+  (onClickDownload)="downloadFile($event)"
+  [filesCapacitacion]="selectedCapacitacionFiles"
+  (onClickDelete)="onDeleteFile($event.id)"
+  [showDelete]="true"
+  [showUpload]="true"
+  [showDownload]="true"
+></app-capacitacion-files-dialog>

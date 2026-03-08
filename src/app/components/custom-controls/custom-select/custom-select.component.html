@@ -1,0 +1,29 @@
+<div [formGroup]="form" [id]="control.name" class="form-group">
+  <label [for]="control.name"
+    class="block text-sm font-medium">{{fieldLabel}}</label>
+  <div *ngIf="!viewMode; else view" class="mt-1">
+    <p-select 
+      [id]="control.name" 
+      [required]="required" 
+      [formControlName]="control.name" 
+      [options]="options"
+      [showClear]="readonly ? false : true"
+      class="w-full"
+      [ngClass]="control.classList!"
+      [ngClass]="validadoresService.campoInvalido(form.controls[control.name]!) ? 'ng-invalid ng-dirty' : ''"
+      [readonly]="readonly"
+      appendTo="body"
+    ></p-select>
+    <ng-container *ngIf="validadoresService.campoInvalido(form.controls[control.name]!)">
+      <div class="error-container">
+        <small class="small error"
+          *ngFor="let error of validadoresService.obtenerErrores(form.controls[control.name]!)">
+          <span>{{error!.message}}</span>
+        </small>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #view>
+    {{form.get(control.name)?.value}}
+  </ng-template>
+</div>

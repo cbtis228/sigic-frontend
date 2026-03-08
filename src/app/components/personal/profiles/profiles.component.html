@@ -1,0 +1,51 @@
+<section class="h-full mb-0 pb-0">
+  <app-custom-paginated-table 
+    #table 
+    [title]="title" 
+    [columnHeaders]="columns" 
+    [tableId]="'id'" 
+    [data]="data"
+    [totalRows]="totalRows" 
+    [actions]="actions" 
+    [endpointName]="endpointName" 
+    [filterFields]="filterFields"
+    [filterForm]="filterForm" 
+    [permissionShowNew]="'profiles_create'" 
+    (onNew)="new()"
+    ></app-custom-paginated-table>
+</section>
+
+<app-custom-dialog [(visible)]="showForm" [title]="title" [form]="form" [inputFields]="inputFields"
+  [submitLabel]="'core.form.buttons.save' | translate" [cancelLabel]="'core.form.buttons.cancel' | translate"
+  (onSubmit)="saveData()"></app-custom-dialog>
+
+<p-dialog [header]="'permissions.title' | translate" [(visible)]="showPermissionsForm" [modal]="true" class="p-fluid">
+  <p-accordion>
+    <p-accordion-panel *ngFor="let module of modulesPermissions; let i = index" [value]="i">
+      <p-accordion-header>
+        <p-checkbox (click)="toggleAllPermissionsModule($event,module)" [ngModel]="mapModules.get(module)"
+          [value]="module" [binary]="true"></p-checkbox>
+        {{module}}
+      </p-accordion-header>
+      <p-accordion-content>
+        <ng-container *ngFor="let grantedPermission of modulePermissions(module)">
+          <div class="mb-3">
+            <p-checkbox (onChange)="toggleGrantedParent(module)" [value]="grantedPermission.profile_permission_id"
+              [binary]="true" [(ngModel)]="grantedPermission.isGranted"></p-checkbox>
+            {{grantedPermission.permission!.description}}
+          </div>
+        </ng-container>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
+  <ng-template #footer>
+    <div class="flex justify-end">
+      <p-button [label]="'core.form.buttons.save' | translate" type="button" (onClick)="saveNewPermissions()"
+        class="mt-4"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+<!-- 
+<app-custom-dialog [useCustomTemplate]="true"  [(visible)]="showPermissionsForm" [title]="'permissions.title'">
+  
+</app-custom-dialog> -->

@@ -1,0 +1,44 @@
+* {
+  /* Override icon size */
+  --p-icon-size: 1rem !important; /* Adjust to your desired size */
+
+  /* Optionally adjust button padding to match */
+  --button-padding: 0.25rem !important;
+
+  --p-datatable-body-cell-padding: 0.25rem 0.75rem !important;
+  --p-datatable-header-cell-padding: 0.75rem 0.75rem !important;
+}
+
+::ng-deep .sticky-table {
+  .p-datatable-wrapper {
+    height: calc(100% - 60px); /* Adjust based on paginator height */
+    overflow-y: auto;
+  }
+
+  .p-paginator {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+
+  .p-datatable-thead > tr > th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: light-dark(var(--p-surface-300), var(--p-surface-900));
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  .p-button-icon {
+    font-size: 1rem !important;
+  }
+
+  .p-datatable-tbody > tr{
+    background-color: light-dark(var(--p-surface-100), var(--p-surface-700));
+  }
+
+  .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(2n+1){
+    background-color: light-dark(var(--p-surface-200), var(--p-surface-800));
+  }
+
+}

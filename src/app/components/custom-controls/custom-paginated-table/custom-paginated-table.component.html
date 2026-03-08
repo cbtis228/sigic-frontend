@@ -1,0 +1,111 @@
+<div class="mx-2 pt-2 flex flex-col h-full gap-4 bg-slate-50/50">
+
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5 flex justify-between items-center gap-4">
+    <div class="flex flex-col">
+      <span class="hidden lg:block text-2xl font-bold text-gray-800 leading-tight">{{ title | translate }}</span>
+    </div>
+
+    <div class="flex flex-1">
+      <div class="w-full">
+        <p-inputGroup>
+          <input type="text" pInputText
+            class="w-full rounded-l-xl border-gray-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-sm"
+            [(ngModel)]="globalSearchText" [placeholder]="'core.table.search' | translate">
+          <button pButton type="button" icon="pi pi-search" class="rounded-r-xl bg-blue-600 border-blue-600"
+            (click)="filterTable()"></button>
+        </p-inputGroup>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <p-button [text]="true" (onClick)="resetTable()" severity="secondary" [rounded]="true"
+        [label]="menuService.isDesktop() ? ('core.table.reset' | translate) : ''" icon="pi pi-refresh">
+      </p-button>
+      <p-button [text]="true" (onClick)="showFilters()" severity="secondary" [rounded]="true"
+        [label]="menuService.isDesktop() ? ('core.table.filter' | translate) : ''" icon="pi pi-filter">
+      </p-button>
+      <p-button *ngIf="showNew" (onClick)="new()" severity="success" [rounded]="true"
+        [label]="menuService.isDesktop() ? ('core.table.new' | translate) : ''" icon="pi pi-plus">
+      </p-button>
+    </div>
+  </div>
+
+  <div class="flex-1 relative overflow-hidden bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+    <p-table #datatable [value]="data" [dataKey]="tableId" [rows]="10"
+      styleClass="p-datatable-responsive-demo custom-modern-table" [paginator]="true" [lazy]="true"
+      (onLazyLoad)="loadTable($event)" [sortMode]="'single'" [scrollable]="true" scrollHeight="flex"
+      [totalRecords]="totalRows" class="flex-1">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let header of columnHeaders" [pSortableColumn]="header.sortName ?? header.field"
+            class="bg-gray-50/80 text-gray-500 font-semibold text-xs uppercase tracking-wider py-4 px-5 border-b border-gray-100">
+            <div class="flex items-center gap-2">
+              {{ header.label | translate }}
+              <p-sortIcon [field]="header.sortName ?? header.field"></p-sortIcon>
+            </div>
+          </th>
+          <th *ngIf="actions.length > 0"
+            class="bg-gray-50/80 text-gray-500 font-semibold text-xs uppercase tracking-wider py-4 px-5 border-b border-gray-100">
+            <div class="flex items-center gap-2"><i class="pi pi-cog"></i> {{'core.table.actions' | translate}}</div>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData>
+        <tr class="hover:bg-blue-50/50 transition-colors border-b border-gray-50 group">
+          <td *ngFor="let col of columnHeaders" class="py-4 px-5">
+            <ng-container [ngSwitch]="col.type">
+
+              <span *ngSwitchCase="'id'" class="font-mono text-blue-600 font-semibold">
+                {{ getNestedValue(rowData, col.field) }}
+              </span>
+
+              <span *ngSwitchCase="'text'" class="text-gray-700 font-medium">
+                {{ getNestedValue(rowData, col.field) }}
+              </span>
+
+              <span *ngSwitchCase="'date'" class="text-gray-500 text-sm">
+                {{ getNestedValue(rowData, col.field) | date:'dd/MM/yyyy' }}
+              </span>
+
+              <span *ngSwitchCase="'currency'" class="font-semibold text-gray-800">
+                {{ getNestedValue(rowData, col.field) | currency:'$' }}
+              </span>
+
+              <ng-container *ngSwitchCase="'option'">
+                <span class="px-3 py-1 rounded-full text-xs font-bold"
+                  [ngClass]="returnOptionBadgeClass(col.optionsFormat!, getNestedValue(rowData, col.field))">
+                  {{ returnOptionValue(col.options!, rowData[col.field]) | translate }}
+                </span>
+              </ng-container>
+
+              <span *ngSwitchDefault class="text-gray-600">
+                {{ getNestedValue(rowData, col.field) }}
+              </span>
+            </ng-container>
+          </td>
+
+          <td *ngIf="actions.length > 0" class="py-4 px-5">
+            <p-menu [popup]="true" #actionsMenu [model]="contextMenuItems" [appendTo]="'body'"></p-menu>
+            <p-button icon="pi pi-ellipsis-v" [text]="true" [rounded]="true" severity="secondary"
+              (click)="onMenuToggle($event, rowData)">
+            </p-button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td [attr.colspan]="columnHeaders.length + 1" class="text-center py-20">
+            <div class="flex flex-col items-center gap-2">
+              <i class="pi pi-filter-slash text-4xl text-gray-200"></i>
+              <h3 class="text-gray-500 font-medium">{{'core.table.empty.title' | translate}}</h3>
+              <p class="text-gray-400 text-sm">{{'core.table.empty.subtitle' | translate}}</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

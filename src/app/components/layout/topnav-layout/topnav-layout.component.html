@@ -1,0 +1,37 @@
+<header class="top-0 z-50 h-16 border-b-2 fixed w-full bg-[#fefefe]">
+  <nav class="flex pl-4 h-full lg:pl-12">
+    <div class="flex items-center lg:hidden">
+      <button class="p-2 mr-2" (click)="toggleMenu($event)">
+        <i class="pi pi-bars text-2xl text-brand-600"></i>
+      </button>
+    </div>
+    <div class="flex items-center p-2 gap-2">
+      <a
+        href="dashboard"
+        routerLinkActive="router-link-active"
+        class="flex flex-row"
+      >
+        <img src="assets/logo_cbtis.png" alt="CBTis 228" class="h-10 w-10" />
+      </a>
+    </div>
+    <div
+      class="flex flex-grow flex-1 justify-end align-middle items-center pr-4 gap-2"
+    >
+      <div class="flex flex-row items-center gap-2">
+        <div class="hidden md:block whitespace-nowrap">
+          {{ fullName }}
+        </div>
+        <button class="p-2 mr-2" (click)="settingsMenu.toggle($event)">
+          <i class="pi pi-sign-out text-2xl text-brand-600"></i>
+        </button>
+      </div>
+    </div>
+    <p-menu
+      [popup]="true"
+      #settingsMenu
+      [model]="settingsMenuItems"
+      class="z-50"
+    ></p-menu>
+    <app-configurator #templateMenu />
+  </nav>
+</header>

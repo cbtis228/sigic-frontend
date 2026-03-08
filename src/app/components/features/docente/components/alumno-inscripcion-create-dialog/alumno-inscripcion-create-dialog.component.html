@@ -1,0 +1,181 @@
+<p-dialog
+  [(visible)]="visible"
+  modal="true"
+  header="Inscribir alumno"
+  [style]="{ width: '100%', maxWidth: '700px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-6 space-y-6 rounded-lg">
+    <form [formGroup]="inscripcionForm" class="space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+        <div class="space-y-2">
+          <label for="alumno" class="block text-sm font-medium text-gray-700"
+            >Alumno *</label
+          >
+          <p-autocomplete
+            id="alumno"
+            [forceSelection]="true"
+            formControlName="alumno"
+            optionLabel="numero_control"
+            placeholder="Seleccione un alumno"
+            filterBy="nombre_completo"
+            (completeMethod)="filterAlumnos($event)"
+            class="w-full shadow-sm rounded-lg"
+            [suggestions]="alumnos"
+            inputStyleClass="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-colors"
+          >
+            <ng-template let-alumno #item>
+              <div class="flex items-center gap-2">
+                <div>
+                  {{ alumno.numero_control }} {{ alumno.nombres }}
+                  {{ alumno.paterno }} {{ alumno.materno }}
+                </div>
+              </div>
+            </ng-template>
+          </p-autocomplete>
+          <small
+            *ngIf="
+              inscripcionForm.get('alumno')?.invalid &&
+              inscripcionForm.get('alumno')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar un alumno
+          </small>
+        </div>
+
+
+        <div class="space-y-2">
+          <label for="grupo" class="block text-sm font-medium text-gray-700"
+            >Grupo *</label
+          >
+          <p-autocomplete
+            id="grupo"
+            dropdown="true"
+            formControlName="grupo"
+            optionLabel="nombre_grupo"
+            placeholder="Seleccione un grupo"
+            [showClear]="true"
+            (completeMethod)="filterGrupos($event)"
+            (onSelect)="grupoSeleccionado = $event.value"
+            [forceSelection]="true"
+            [suggestions]="grupos"
+            class="w-full shadow-sm rounded-lg"
+            inputStyleClass="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-colors"
+          >
+            <ng-template let-grupo pTemplate="item">
+              <div class="font-semibold text-gray-800">
+                {{ grupo.nombre_grupo }}
+              </div>
+            </ng-template>
+          </p-autocomplete>
+          <small
+            *ngIf="
+              inscripcionForm.get('grupo')?.invalid &&
+              inscripcionForm.get('grupo')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar un grupo
+          </small>
+        </div>
+
+
+        <div class="space-y-2">
+          <label for="fecha" class="block text-sm font-medium text-gray-700"
+            >Fecha de inscripción</label
+          >
+          <p-datepicker
+            id="fecha"
+            formControlName="fecha_inscripcion"
+            dateFormat="dd/mm/yy"
+            placeholder="Seleccione la fecha"
+            inputStyleClass="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-colors shadow-sm"
+          ></p-datepicker>
+        </div>
+
+
+        <div class="space-y-2 sm:col-span-2">
+          <label
+            for="observaciones"
+            class="block text-sm font-medium text-gray-700"
+            >Observaciones</label
+          >
+          <textarea
+            id="observaciones"
+            formControlName="observaciones"
+            rows="3"
+            placeholder="Observaciones adicionales sobre la inscripción"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-colors shadow-sm"
+          ></textarea>
+        </div>
+      </div>
+    </form>
+
+
+    <div
+      *ngIf="grupoSeleccionado"
+      class="bg-gray-50 border border-gray-200 p-4 rounded-lg shadow-sm"
+    >
+      <h4 class="font-semibold text-blue-700 mb-3 flex items-center">
+        <i class="pi pi-info-circle mr-2"></i> Información del grupo
+        seleccionado
+      </h4>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-600">Docente</span>
+          <span class="font-medium text-gray-800"
+            >{{ grupoSeleccionado.docente.nombres }}
+            {{ grupoSeleccionado.docente.paterno }}
+            {{ grupoSeleccionado.docente.materno }}</span
+          >
+        </div>
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-600">Capacidad</span>
+          <span class="font-medium text-gray-800">{{
+            grupoSeleccionado.capacidad_maxima
+          }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-600">Turno</span>
+          <span class="font-medium text-gray-800">{{
+            grupoSeleccionado.turno
+          }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-sm text-gray-600">Ciclo Escolar</span>
+          <span class="font-medium text-gray-800">{{
+            grupoSeleccionado.ciclo_escolar.nombre_ciclo
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end space-x-3">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors"
+        (click)="visibleChange.emit(false)"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Inscribir"
+        severity="info"
+        (click)="sendInscripcionCreate()"
+        icon="pi pi-check"
+        [disabled]="inscripcionForm.invalid"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

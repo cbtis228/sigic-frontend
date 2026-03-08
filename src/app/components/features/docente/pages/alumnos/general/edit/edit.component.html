@@ -1,0 +1,8 @@
+<div class="p-2 md:p-44">
+  <app-alumno-edit-general-card
+    [showSkeletons]="!alumno"
+    [alumno]="alumno"
+    [showStatus]="true"
+    (updatedAlumno)="onSubmit($event)"
+  ></app-alumno-edit-general-card>
+</div>

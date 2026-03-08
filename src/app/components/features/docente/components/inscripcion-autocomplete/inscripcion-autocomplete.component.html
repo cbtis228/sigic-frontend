@@ -1,0 +1,19 @@
+<div class="w-full">
+  <p-autocomplete
+    id="inscripcion-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    appendTo="body"
+    [showClear]="showClear"
+    (completeMethod)="filterInscripcions($event)"
+    (onSelect)="onInscripcionSelect($event)"
+    (onClear)="onInscripcionClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="inscripciones"
+    [(ngModel)]="selectedInscripcion"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    class="w-full shadow-sm rounded-lg"
+  >
+  </p-autocomplete>
+</div>

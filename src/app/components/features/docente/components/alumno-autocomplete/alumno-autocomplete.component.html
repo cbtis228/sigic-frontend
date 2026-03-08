@@ -1,0 +1,23 @@
+<div class="w-full">
+  <p-autocomplete
+    id="alumno-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    appendTo="body"
+    [showClear]="showClear"
+    (completeMethod)="filterAlumnos($event)"
+    (onSelect)="onAlumnoSelect($event)"
+    (onClear)="onAlumnoClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="alumnos"
+    [(ngModel)]="selectedAlumno"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    optionLabel="nombre_completo"
+    class="w-full shadow-sm rounded-lg"
+  >
+    <ng-template let-alumno pTemplate="item">
+      {{ alumno.nombres }} {{ alumno.paterno }} {{ alumno.materno }}
+    </ng-template>
+  </p-autocomplete>
+</div>

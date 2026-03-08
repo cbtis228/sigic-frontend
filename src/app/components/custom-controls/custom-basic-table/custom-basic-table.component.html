@@ -1,0 +1,33 @@
+<div class="mx-2 pt-2 flex flex-col h-full gap-2">
+  <div class="flex-1 relative overflow-auto">
+    <p-table #datatable [value]="data" stripedRowsstyleClass="pt-1 h-full" [paginator]="false"
+      [showCurrentPageReport]="false" responsiveLayout="scroll" class="sticky-table" [scrollable]="true"
+      scrollHeight="flex">
+      <ng-template pTemplate="header">
+        <tr class="sticky top-0 shadow-sm">
+          <th *ngFor="let header of columnHeaders" [ngStyle]="{ minWidth: header.minWidth }">
+            {{ header.label | translate }}
+          </th>
+          <th>{{'core.table.actions' | translate}}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+        <tr>
+          <td *ngFor="let col of columnHeaders">
+            <ng-container [ngSwitch]="col.type">
+              <span *ngSwitchCase="'text'">{{ getNestedValue(rowData, col.field) }}</span>
+              <span *ngSwitchCase="'date'">{{ getNestedValue(rowData, col.field) | date:'dd/MM/yyyy' }}</span>
+              <span *ngSwitchCase="'currency'">{{ getNestedValue(rowData, col.field) | currency:'$' }}</span>
+            </ng-container>
+          </td>
+          <td>
+            <button pButton pRipple [icon]="'pi pi-trash'"
+              (click)="deleteRow(rowIndex)">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

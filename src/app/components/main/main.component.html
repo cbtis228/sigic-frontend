@@ -1,0 +1,16 @@
+<p-toast></p-toast>
+@if (loading$ | async) {
+  <div
+    class="fixed top-0 left-0 z-[9999] w-full h-full bg-gray-600 bg-opacity-50"
+  >
+    <p-progress-spinner
+      class="fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+    ></p-progress-spinner>
+  </div>
+}
+<ng-container *ngIf="storage.isLoggedIn(); else notLoggedIn">
+  <app-base-layout></app-base-layout>
+</ng-container>
+<ng-template #notLoggedIn>
+  <app-login></app-login>
+</ng-template>

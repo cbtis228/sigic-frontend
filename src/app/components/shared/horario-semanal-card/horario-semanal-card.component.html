@@ -1,0 +1,137 @@
+<ng-container *ngIf="showHeader; else sinHeader">
+  <app-card-with-title [title]="'Horario'">
+    <ng-container *ngTemplateOutlet="contenidoHorario"></ng-container>
+  </app-card-with-title>
+</ng-container>
+
+<ng-template #sinHeader>
+  <ng-container *ngTemplateOutlet="contenidoHorario"></ng-container>
+</ng-template>
+
+<ng-template #contenidoHorario>
+  <div class="lg:hidden flex flex-row justify-between border-b border-brand-100 mb-4 overflow-x-auto">
+    <button *ngFor="let d of dias"
+      class="min-w-[40px] text-center py-2 text-xs sm:text-sm font-medium transition-colors duration-200"
+      [class.text-brand-600]="diaActivo === d" [class.text-brand-400]="diaActivo !== d"
+      [class.border-b-2]="diaActivo === d" [class.border-brand-500]="diaActivo === d"
+      [class.font-semibold]="diaActivo === d" (click)="diaActivo = d">
+      {{ d }}
+    </button>
+  </div>
+
+  <div class="space-y-4 lg:space-y-0">
+    <div class="hidden lg:grid grid-cols-5 gap-2">
+      <div *ngFor="let dia of dias" class="space-y-3">
+        <div class="text-center rounded-t-xl py-2 bg-brand-50 text-brand-700 font-semibold">
+          {{ dia }}
+        </div>
+
+        <!-- Clases del día -->
+        <div class="space-y-3">
+          <div *ngFor="let c of horariosPorDia[dia]"
+            class="bg-brand-50 rounded-r-lg p-3 flex flex-col gap-2 shadow-sm hover:shadow-md transition-shadow duration-200 border-l-4 border-brand-700">
+            <div class="font-medium text-brand-900 text-sm">
+              {{ c.asignacion_docente.materia?.nombre }}
+            </div>
+
+            <!-- Mostrar grupo si showGrupo es true -->
+            <div *ngIf="showGrupo && c?.grupo?.nombre_grupo"
+              class="text-sm font-semibold text-brand-600 py-1 rounded inline-block">
+              {{ c.grupo.nombre_grupo }}
+            </div>
+
+            <div class="font-semibold text-brand-700 text-sm">
+              {{ trimHora(c.hora_inicio) }} - {{ trimHora(c.hora_fin) }}
+            </div>
+            <div class="text-xs text-brand-600">
+              <div>Aula: {{ c.salon?.nombre || "Sin aula" }}</div>
+              <div *ngIf="c.asignacion_docente.docente">
+                Profesor: {{ c.asignacion_docente.docente.nombres }}
+                {{ c.asignacion_docente.docente.paterno }}
+              </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex justify-end gap-2 pt-2" *ngIf="showActions">
+              <button *ngIf="
+                  permissionsService.has$('academico.change_horario') | async
+                " class="px-2 py-1 text-xs rounded-md bg-brand-500 text-white hover:bg-brand-600 transition-colors"
+                (click)="onEditClick.emit(c)">
+                Editar
+              </button>
+              <button *ngIf="
+                  permissionsService.has$('academico.delete_horario') | async
+                " class="px-2 py-1 text-xs rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors"
+                (click)="onDeleteClick.emit(c.id)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+
+          <!-- Mensaje sin clases -->
+          <div *ngIf="!horariosPorDia[dia].length"
+            class="text-brand-300 text-center py-4 text-sm border border-dashed border-brand-200 rounded-lg">
+            <i class="fas fa-calendar-times text-lg mb-1 block"></i>
+            Sin clases
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Versión móvil -->
+    <div class="lg:hidden space-y-4">
+      <div *ngFor="let c of horariosPorDia[diaActivo]"
+        class="bg-brand-50 border border-brand-100 rounded-lg p-3 sm:p-4 flex flex-col sm:flex-row gap-3 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <!-- Icono -->
+        <div class="text-brand-500 text-lg flex-shrink-0 self-start sm:self-center">
+          <i class="fas fa-clock"></i>
+        </div>
+
+        <!-- Detalles -->
+        <div class="flex-1">
+          <div class="font-medium text-brand-900 text-sm sm:text-base">
+            {{ c.asignacion_docente.materia?.nombre }}
+          </div>
+
+          <!-- Mostrar grupo si showGrupo es true (móvil) -->
+          <div *ngIf="showGrupo && c?.grupo?.nombre_grupo"
+            class="text-sm font-semibold text-brand-600 py-1 rounded inline-block">
+            {{ c.grupo.nombre_grupo }}
+          </div>
+
+          <div class="font-semibold text-brand-700 text-sm sm:text-base">
+            {{ c.hora_inicio }} - {{ c.hora_fin }}
+          </div>
+          <div class="text-xs sm:text-sm text-brand-600 mt-1">
+            Aula: {{ c.salon?.nombre || "Sin aula asignada" }}<br />
+            <div *ngIf="c.asignacion_docente.docente">
+              Profesor: {{ c.asignacion_docente.docente.nombres }}
+              {{ c.asignacion_docente.docente.paterno }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex sm:flex-row flex-col sm:justify-end gap-2 pt-2 sm:pt-0"
+          *ngIf="showActions && horarios.length > 0">
+          <button *ngIf="permissionsService.has$('academico.change_horario') | async"
+            class="px-3 py-1 text-xs sm:text-sm rounded-md bg-brand-500 text-white hover:bg-brand-600 transition-colors"
+            (click)="onEditClick.emit(c)">
+            Editar
+          </button>
+          <button *ngIf="permissionsService.has$('academico.delete_horario') | async"
+            class="px-3 py-1 text-xs sm:text-sm rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors"
+            (click)="onDeleteClick.emit(c.id)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+
+      <!-- Sin clases (móvil) -->
+      <p *ngIf="!horariosPorDia[diaActivo].length" class="text-brand-300 text-center py-8 text-sm sm:text-base">
+        <i class="fas fa-calendar-times text-xl sm:text-2xl mb-2 block"></i>
+        Sin clases programadas para este día
+      </p>
+    </div>
+  </div>
+</ng-template>

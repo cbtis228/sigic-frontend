@@ -1,0 +1,65 @@
+<form [formGroup]="form" (ngSubmit)="submitForm($event)">
+  <ng-container *ngIf="showTitle">
+    <div class="flex justify-between justify-content-between">
+      <span class="text-2xl">{{title | translate}}</span>
+      <p-button *ngIf="showViewToggle" [text]="true" (onClick)="toggleViewMode()" [rounded]="true"
+        [icon]="viewMode ? 'pi pi-pencil' : 'pi pi-eye'"></p-button>
+    </div>
+    <hr class="mb-4">
+  </ng-container>
+  <div class="grid grid-cols-1 gap-4 lg:grid-cols-{{gridCols}}">
+    <ng-container *ngFor="let field of inputFields">
+      <ng-container *ngIf="field.show">
+        <ng-container *ngIf="field.type === 'text'">
+          <app-custom-input-text [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [form]="form" (onBlur)="onBlur.emit($event)" (onFocus)="onFocus.emit($event)" [ngClass]="field.classList!"
+            (onChange)="onChange.emit($event)" (onInput)="onInput.emit($event)" (onKeyDown)="onKeyDown.emit($event)"
+            (onPaste)="onPaste.emit($event)" [required]="field.required!" [readonly]="field.readonly!"
+            (onDrop)="onDrop.emit($event)" [allowSpaces]="field.allowSpaces"></app-custom-input-text>
+        </ng-container>
+        <ng-container *ngIf="field.type === 'textarea'">
+          <app-custom-textarea [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [form]="form" (onBlur)="onBlur.emit($event)" (onFocus)="onFocus.emit($event)" [ngClass]="field.classList!"
+            (onChange)="onChange.emit($event)" (onInput)="onInput.emit($event)" (onKeyDown)="onKeyDown.emit($event)"
+            (onPaste)="onPaste.emit($event)" [required]="field.required!" [readonly]="field.readonly!"
+            (onDrop)="onDrop.emit($event)" [allowSpaces]="field.allowSpaces"></app-custom-textarea>
+        </ng-container>
+        <ng-container *ngIf="field.type === 'autocomplete'">
+          <app-custom-input-autocomplete [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [form]="form" (onBlur)="onBlur.emit($event)" (onFocus)="onFocus.emit($event)" [suggestions]="field.suggestions!"
+            (onChange)="onChange.emit($event)" (onInput)="onInput.emit($event)" (onKeyDown)="onKeyDown.emit($event)"
+            (onPaste)="onPaste.emit($event)" [required]="field.required!" [readonly]="field.readonly!" [ngClass]="field.classList!"
+            (onDrop)="onDrop.emit($event)" [allowSpaces]="field.allowSpaces"></app-custom-input-autocomplete>
+        </ng-container>
+        <ng-container *ngIf="field.type === 'number'">
+          <app-custom-input-number [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [form]="form" (onBlur)="onBlur.emit($event)" (onFocus)="onFocus.emit($event)" [ngClass]="field.classList!"
+            (onChange)="onChange.emit($event)" (onInput)="onInput.emit($event)" (onKeyDown)="onKeyDown.emit($event)"
+            (onPaste)="onPaste.emit($event)" [required]="field.required!" [mode]="field.mode!"
+            [minFractionDigits]="field.minFractionDigits!" [maxFractionDigits]="field.maxFractionDigits!"
+            (onDrop)="onDrop.emit($event)"></app-custom-input-number>
+        </ng-container>
+        <ng-container *ngIf="field.type === 'password'">
+          <app-custom-input-password [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [form]="form" (onBlur)="onBlur.emit($event)" (onFocus)="onFocus.emit($event)" [ngClass]="field.classList!"
+            (onChange)="onChange.emit($event)" (onInput)="onInput.emit($event)" (onKeyDown)="onKeyDown.emit($event)"
+            (onPaste)="onPaste.emit($event)" [required]="field.required!"
+            (onDrop)="onDrop.emit($event)"></app-custom-input-password>
+        </ng-container>
+        <ng-container *ngIf="field.type === 'select'">
+          <app-custom-select [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [required]="field.required!" [form]="form" [options]="field.options!" [readonly]="field.readonly!" [ngClass]="field.classList!"
+            [initialValue]="field.initialValue"></app-custom-select>
+        </ng-container>
+        <ng-container *ngIf="field.type === 'date'">
+          <app-custom-date [fieldLabel]="(field.label | translate) + (field.required ? ' *' : '')" [viewMode]="viewMode" [control]="field"
+            [required]="field.required!" [form]="form" [initialValue]="field.initialValue" [ngClass]="field.classList!"></app-custom-date>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div class="flex justify-end" *ngIf="!viewMode && showSubmit">
+    <p-button [label]="submitLabel" type="submit" class="mt-4"></p-button>
+  </div>
+</form>

@@ -1,0 +1,241 @@
+<p-confirmdialog />
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '80rem', height: '60rem' }"
+  [modal]="true"
+  draggable="false"
+  (onHide)="this.visibleChange.emit(false)"
+  header="Avances De Horas"
+>
+  <div class="dialog-content">
+    <!-- Información principal -->
+    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="text-sm font-medium text-gray-600">Alumno</label>
+          <p class="text-gray-900 font-semibold">
+            {{ servicioSocial?.alumno?.nombres }}
+            {{ servicioSocial?.alumno?.paterno }}
+            {{ servicioSocial?.alumno?.materno }}
+          </p>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-600">Actividad</label>
+          <p class="text-gray-900">{{ servicioSocial?.actividad }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-600"
+            >Horas Acumuladas</label
+          >
+          <p class="text-green-600 font-bold text-lg">{{ horasAcumuladas }}</p>
+        </div>
+      </div>
+    </div>
+
+    <p-tabView>
+      <p-tabPanel header="Registro de Horas">
+        <div class="timeline-container">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-semibold text-gray-800">
+              Historial de Horas Registradas
+            </h3>
+            <button
+              *ngIf="
+                permissionService.has$(
+                  'academico.add_registrohorasserviciosocial'
+                ) | async
+              "
+              pButton
+              label="Agregar Horas"
+              (click)="onShowRegistrarHorasDialog()"
+              icon="pi pi-plus"
+              class="p-button-sm p-button-success"
+            ></button>
+          </div>
+          <app-servicio-social-avances-timeline
+            [showDeleteButton]="
+              permissionService.has$(
+                'academico.delete_registrohorasserviciosocial'
+              ) | async
+            "
+            [registrosServicioSocial]="registroHorasServicioSocial"
+            (onClickDelete)="onDeleteRegistroHorasServicioSocial($event)"
+          ></app-servicio-social-avances-timeline>
+        </div>
+      </p-tabPanel>
+
+      <p-tabPanel header="Evidencias">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-semibold text-gray-800">
+            Archivos de Evidencia
+          </h3>
+
+          <button
+            *ngIf="
+              permissionService.has$('academico.add_fileserviciosocial') | async
+            "
+            pButton
+            label="Subir archivo"
+            icon="pi pi-upload"
+            class="p-button-sm p-button-success"
+            (click)="onShowUploadFileDialog()"
+          ></button>
+        </div>
+
+        <app-servicio-social-avances-file-list
+          [filesServicioSocial]="filesServicioSocial"
+          (onClickDelete)="deleteFile.emit($event)"
+          (onClickDownload)="downloadFile.emit($event)"
+        ></app-servicio-social-avances-file-list>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <button
+        pButton
+        label="Cerrar"
+        icon="pi pi-times"
+        class="p-button-text"
+        (click)="visibleChange.emit(false)"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [style]="{ width: '25rem', height: '30 rem' }"
+  [(visible)]="visibleRegistrarHorasDialog"
+  header="Registrar horas"
+  modal="true"
+>
+  <form [formGroup]="form" class="grid grid-cols-1 gap-6 p-fluid">
+    <div class="field col">
+      <label for="horas">Horas*</label>
+      <p-inputnumber id="horas" class="w-full" formControlName="horas" />
+      <p
+        *ngIf="form.get('horas')?.invalid && form.get('horas')?.touched"
+        class="text-red-500 text-xs mt-1"
+      >
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <div class="field col">
+      <label for="fecha_registro">Fecha de Registro*</label>
+      <p-datepicker
+        [style]="{ width: '100%' }"
+        id="fecha_registro"
+        formControlName="fecha_registro"
+        dateFormat="yy-mm-dd"
+        appendTo="body"
+      ></p-datepicker>
+      <p
+        *ngIf="
+          form.get('fecha_registro')?.invalid &&
+          form.get('fecha_registro')?.touched
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <div class="field col">
+      <label for="descripcion">Descripcion</label>
+      <textarea
+        class="w-full"
+        rows="5"
+        cols="30"
+        pTextarea
+        formControlName="descripcion"
+      ></textarea>
+    </div>
+  </form>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Cancelar"
+      class="p-button-text"
+      (click)="onHideRegistrarHorasDialog()"
+    ></button>
+    <button
+      pButton
+      label="Guardar"
+      (click)="onSaveRegistrarHoras()"
+      [disabled]="form.invalid"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="visibleUploadFileDialog"
+  [style]="{ width: '28rem' }"
+  header="Subir evidencia"
+  modal="true"
+  [closable]="false"
+>
+  <div class="flex flex-col gap-4">
+    <!-- Dropzone -->
+    <div
+      class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
+      (click)="fileInput.click()"
+    >
+      <i class="pi pi-cloud-upload text-4xl text-primary-500 mb-3 block"></i>
+      <p class="font-medium text-gray-800">Arrastra tu archivo aquí</p>
+      <p class="text-sm text-gray-500">o haz clic para seleccionarlo</p>
+      <p class="text-xs text-gray-400 mt-2">
+        PDF, imágenes, Word, Excel · máx. 10MB
+      </p>
+    </div>
+
+    <!-- Input real -->
+    <input
+      #fileInput
+      type="file"
+      class="hidden"
+      (change)="onFileSelected($event)"
+      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.csv"
+    />
+
+    <!-- Archivo seleccionado -->
+    <div
+      *ngIf="selectedFile"
+      class="flex items-center justify-between bg-gray-50 border rounded-md p-3"
+    >
+      <div class="flex items-center gap-2">
+        <i class="pi pi-file text-primary-500"></i>
+        <span class="text-sm text-gray-800 truncate max-w-[14rem]">
+          {{ selectedFile.name }}
+        </span>
+      </div>
+      <button
+        pButton
+        icon="pi pi-times"
+        class="p-button-text p-button-sm text-gray-400 hover:text-red-500"
+        (click)="removeSelectedFile()"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <button
+        pButton
+        label="Cancelar"
+        class="p-button-text"
+        (click)="onCancelUpload()"
+      ></button>
+      <button
+        pButton
+        label="Subir"
+        icon="pi pi-upload"
+        class="p-button-primary"
+        [disabled]="!selectedFile"
+        (click)="uploadSelectedFile()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

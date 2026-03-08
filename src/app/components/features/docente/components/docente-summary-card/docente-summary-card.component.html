@@ -1,0 +1,52 @@
+<div
+  class="w-full h-full border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow flex flex-col"
+>
+  <!-- ENCABEZADO: Nombre y estatus -->
+  <div class="flex justify-between items-start mb-3">
+    <div>
+      <h4 class="font-semibold text-gray-800">
+        {{ docente.nombres }} {{ docente.paterno }} {{ docente.materno }}
+      </h4>
+      <p class="text-sm text-gray-600">
+        {{ docente.correo }}
+      </p>
+    </div>
+    <span
+      [ngClass]="{
+        'bg-green-100 text-green-800': docente.estatus == '1',
+        'bg-orange-100 text-orange-800': docente.estatus == '2',
+      }"
+      class="px-2 py-1 text-xs rounded-full"
+    >
+      {{ docente.estatus | defaultEstatusValue }}
+    </span>
+  </div>
+
+  <div class="space-y-2 mb-4">
+    <div class="flex items-center text-sm text-gray-600">
+      <i class="pi pi-phone mr-2"></i>
+      <span>{{ docente.telefono || 'Sin teléfono' }}</span>
+    </div>
+
+    <div class="flex items-center text-sm text-gray-600">
+      <i class="pi pi-id-card mr-2"></i>
+      <span>RFC: {{ docente.rfc || 'NA' }}</span>
+    </div>
+
+    <div class="flex items-center text-sm text-gray-600">
+      <i class="pi pi-book mr-2"></i>
+      <span>Cédula: {{ docente.cedula_profesional || 'NA' }}</span>
+    </div>
+  </div>
+
+  <!-- BOTÓN HORARIO -->
+  <div class="flex justify-end items-center mt-auto">
+    <button
+      (click)="onHorarioDetailClick.emit(docente)"
+      class="text-blue-500 hover:text-blue-700 text-sm flex items-center"
+    >
+      <i class="pi pi-calendar mr-1"></i>Horario
+    </button>
+  </div>
+</div>
+

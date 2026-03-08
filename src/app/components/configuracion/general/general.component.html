@@ -1,0 +1,35 @@
+<section>
+  <div
+    class="border-r border-b border-l border-t rounded-r rounded-b rounded-l rounded-t border-gray-600 dark:border-gray-200 p-4 m-4">
+    <app-custom-form 
+      [showViewToggle]="true" 
+      [showTitle]="true" 
+      [viewMode]="!firstStart" 
+      [showViewToggle]="!firstStart"
+      (onSubmit)="saveData()" 
+      [inputFields]="inputFields" 
+      [form]="form" 
+      [title]="'General'"
+      [submitLabel]="'core.form.buttons.save' | translate"
+      [cancelLabel]="'core.form.buttons.cancel' | translate"
+      [gridCols]="'3'"
+      [showSubmit]="!firstStart"
+      [showCancel]="!firstStart"
+    ></app-custom-form>
+  </div>
+  <div class="border-r border-b border-l border-t rounded-r rounded-b rounded-l rounded-t border-gray-600 dark:border-gray-200 p-4 m-4">
+    <span class="text-2xl">Logo</span>
+    <hr class="mb-4">
+    <p>Utiliza una imagen en resolución 16:9 para mejores resultados</p>
+    <p-fileupload name="archivoLogo" (onSelect)="onChooseFile($event)" [showCancelButton]="false"
+      [showUploadButton]="false" #logoUpload [multiple]="true" accept="image/*" maxFileSize="5000000" mode="advanced"
+      [chooseLabel]="'Seleccionar'" [fileLimit]="1">
+      <ng-template #empty>
+        <div>Arrastra tu archivo o haz click en Seleccionar</div>
+      </ng-template>
+    </p-fileupload>
+    <div *ngIf="!firstStart" class="flex justify-content-end justify-end">
+      <p-button [label]="'core.form.buttons.save' | translate" [disabled]="!archivoLogo" (onClick)="uploadFile('logo')" class="mt-4"></p-button>
+    </div>
+  </div>
+</section>

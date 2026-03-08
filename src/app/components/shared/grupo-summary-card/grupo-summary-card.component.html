@@ -1,0 +1,86 @@
+<div
+  class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 group"
+>
+  <div
+    class="p-4 text-white bg-gradient-to-r from-blue-500 to-blue-600"
+  >
+    <div class="flex justify-between items-start">
+      <h3 class="text-lg font-bold truncate">{{ grupo.nombre_grupo }}</h3>
+      <span
+        class="px-2 py-1 bg-white bg-opacity-20 rounded-full text-xs font-semibold"
+      >
+        {{ grupo.estatus === 1 ? "🟢 Activo" : "🔴 Inactivo" }}
+      </span>
+    </div>
+    <p class="text-opacity-90 text-sm mt-1">
+      {{ grupo.nivel }} • {{ grupo.turno }}
+    </p>
+  </div>
+
+  <!-- Contenido -->
+  <div class="p-4">
+    <!-- Ciclo Escolar -->
+    <div class="flex items-center mb-3">
+      <i class="pi pi-calendar text-blue-500 mr-2"></i>
+      <span class="text-sm text-gray-600">{{
+        grupo.ciclo_escolar.nombre_ciclo
+      }}</span>
+    </div>
+
+    <!-- Docente -->
+    <div class="flex items-center mb-3" *ngIf="grupo.docente">
+      <i class="pi pi-user text-green-500 mr-2"></i>
+      <span class="text-sm text-gray-600 truncate">
+        {{ grupo.docente.nombres || "Sin docente asignado" }}
+      </span>
+    </div>
+
+    <!-- Capacidad -->
+    <div class="mb-4">
+      <div class="flex justify-between text-xs text-gray-500 mb-1">
+        <span>Capacidad Máxima</span>
+        <span>{{ grupo.capacidad_maxima }} alumnos</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div class="bg-gray-400 h-2 rounded-full" style="width: 50%"></div>
+      </div>
+      <div class="text-xs text-gray-500 mt-1 text-center">
+        {{ 0 }}/{{ grupo.capacidad_maxima }} inscritos
+      </div>
+    </div>
+
+    <!-- Información Adicional -->
+    <div class="grid grid-cols-2 gap-2 text-xs text-gray-500">
+      <div class="text-center p-2 bg-gray-50 rounded-lg">
+        <div class="font-semibold text-gray-700">
+          {{ grupo.anio_escolar }}
+        </div>
+        <div>Año</div>
+      </div>
+      <div class="text-center p-2 bg-gray-50 rounded-lg">
+        <div class="font-semibold text-gray-700">
+          {{ grupo.ciclo_escolar.nombre_ciclo }}
+        </div>
+        <div>Ciclo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer con Botones -->
+  <div class="bg-gray-50 px-4 py-3 border-t border-gray-100">
+    <div class="flex justify-between items-center">
+      <!-- Botón de Menú -->
+      <button class="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+        <i class="pi pi-ellipsis-h"></i>
+      </button>
+
+      <!-- Botón de Ver Inscripciones -->
+      <button
+        class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center"
+      >
+        <i class="pi pi-users mr-2"></i>
+        Ver Inscripciones
+      </button>
+    </div>
+  </div>
+</div>

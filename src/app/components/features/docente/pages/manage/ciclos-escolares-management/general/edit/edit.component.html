@@ -1,0 +1,7 @@
+<div class="p-4">
+  <app-ciclo-escolar-edit-general-card
+    [cicloEscolar]="cicloEscolar"
+    [showSkeletons]="!cicloEscolar"
+    (updatedCicloEscolar)="onSubmit($event)"
+  ></app-ciclo-escolar-edit-general-card>
+</div>

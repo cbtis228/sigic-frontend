@@ -1,0 +1,158 @@
+<p-confirmdialog />
+<div class="documentacion-container shadow-xl">
+  <app-card-with-title title="Documentación">
+    <div>
+      <!-- Barra superior -->
+      <div class="grid grid-cols-1 md:grid-cols-3 items-center mb-6 gap-4">
+        <div class="col-span-1 md:col-span-2">
+          <span class="p-input-icon-left w-full">
+            <input
+              pInputText
+              type="text"
+              class="w-full"
+              placeholder="Buscar archivo por nombre..."
+              [(ngModel)]="globalFilter"
+            />
+          </span>
+        </div>
+        <div class="col-span-1">
+          <button
+          *ngIf="permissionService.has$('docentes.add_filedocente') | async"
+            pButton
+            label="Subir archivo"
+            icon="pi pi-upload"
+            class="p-button-info w-full"
+            (click)="showUploadDialog = true"
+          ></button>
+        </div>
+      </div>
+
+      <!-- =================== EVIDENCIAS =================== -->
+      <section class="mb-8">
+        <div
+          class="flex items-center gap-2 mb-4 px-4 py-2 rounded-xl bg-brand-50 border border-brand-100 shadow-md"
+        >
+          <i class="pi pi-folder text-brand-600"></i>
+          <h3 class="text-brand-800 font-semibold">Evidencias Académicas</h3>
+        </div>
+
+        <div
+          *ngIf="evidencias.length > 0; else emptyEvidencias"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <div *ngFor="let file of evidencias">
+            <app-file-card
+              [file]="file"
+              [showDelete]="
+                permissionService.has$('docentes.delete_filedocente') | async
+              "
+              [showDownload]="
+                permissionService.has$('docentes.view_filedocente') | async
+              "
+              (onClickDownload)="downloadFile(file)"
+              (onClickDelete)="showConfirmDelete(file)"
+            ></app-file-card>
+          </div>
+        </div>
+
+        <ng-template #emptyEvidencias>
+          <div
+            class="flex flex-col items-center justify-center py-12 rounded-xl bg-brand-50 border border-dashed border-brand-200 text-brand-700"
+          >
+            <i class="pi pi-folder-open text-4xl mb-3 text-brand-400"></i>
+            <p class="text-sm font-medium">
+              No hay evidencias académicas registradas
+            </p>
+          </div>
+        </ng-template>
+      </section>
+
+      <!-- =================== EXPEDIENTE =================== -->
+      <section class="mb-8">
+        <div
+          class="flex items-center gap-2 mb-4 px-4 py-2 rounded-xl bg-brand-50 border border-brand-100 shadow-md"
+        >
+          <i class="pi pi-id-card text-brand-600"></i>
+          <h3 class="text-brand-800 font-semibold">Expediente Docente</h3>
+        </div>
+
+        <div
+          *ngIf="expediente.length > 0; else emptyExpediente"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <div *ngFor="let file of expediente">
+            <app-file-card
+              [file]="file"
+              [showDelete]="
+                permissionService.has$('docentes.delete_filedocente') | async
+              "
+              [showDownload]="
+                permissionService.has$('docentes.view_filedocente') | async
+              "
+              (onClickDownload)="downloadFile(file)"
+              (onClickDelete)="showConfirmDelete(file)"
+            ></app-file-card>
+          </div>
+        </div>
+
+        <ng-template #emptyExpediente>
+          <div
+            class="flex flex-col items-center justify-center py-12 rounded-xl bg-brand-50 border border-dashed border-brand-200 text-brand-700"
+          >
+            <i class="pi pi-id-card text-4xl mb-3 text-brand-400"></i>
+            <p class="text-sm font-medium">
+              No hay documentos en el expediente
+            </p>
+          </div>
+        </ng-template>
+      </section>
+
+      <!-- =================== OTROS =================== -->
+      <section>
+        <div
+          class="flex items-center gap-2 mb-4 px-4 py-2 rounded-xl bg-brand-50 border border-brand-100 shadow-md"
+        >
+          <i class="pi pi-paperclip text-brand-600"></i>
+          <h3 class="text-brand-800 font-semibold">Otros Documentos</h3>
+        </div>
+
+        <div
+          *ngIf="otros.length > 0; else emptyOtros"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <div *ngFor="let file of otros">
+            <app-file-card
+              [file]="file"
+              [showDelete]="
+                permissionService.has$('docentes.delete_filedocente') | async
+              "
+              [showDownload]="
+                permissionService.has$('docentes.view_filedocente') | async
+              "
+              (onClickDownload)="downloadFile(file)"
+              (onClickDelete)="showConfirmDelete(file)"
+            ></app-file-card>
+          </div>
+        </div>
+
+        <ng-template #emptyOtros>
+          <div
+            class="flex flex-col items-center justify-center py-12 rounded-xl bg-brand-50 border border-dashed border-brand-200 text-brand-700"
+          >
+            <i class="pi pi-paperclip text-4xl mb-3 text-brand-400"></i>
+            <p class="text-sm font-medium">
+              No hay otros documentos registrados
+            </p>
+          </div>
+        </ng-template>
+      </section>
+    </div>
+  </app-card-with-title>
+</div>
+
+<!-- Dialog -->
+<app-docente-file-upload-dialog
+  [(visible)]="showUploadDialog"
+  (uploadFile)="onUploadFile($event.file, $event.tipo)"
+>
+</app-docente-file-upload-dialog>

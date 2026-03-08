@@ -1,0 +1,143 @@
+<p-dialog
+  [(visible)]="visible"
+  (onHide)="visibleChange.emit(false)"
+  header="Editar horario"
+>
+  <div class="p-6 space-y-6 rounded-lg">
+    <form [formGroup]="horarioForm" class="space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Materia -->
+        <div class="md:col-span-2">
+          <label for="docente" class="block text-sm font-medium text-gray-700"
+            >Asignacion Docente *</label
+          >
+          <app-asignacion-docente-autocomplete
+            [cicloEscolar]="grupo!.ciclo_escolar.id!"
+            formControlName="asignacion_docente"
+          >
+          </app-asignacion-docente-autocomplete>
+          <small
+            *ngIf="
+              horarioForm.get('asignacion_docente')?.invalid &&
+              horarioForm.get('asignacion_docente')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar una asignacion docente
+          </small>
+        </div>
+        <!-- Día de la semana -->
+        <div class="space-y-2">
+          <label
+            for="dia_semana"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Día de la semana *
+          </label>
+          <p-select
+            [options]="diasSemana"
+            formControlName="dia_semana"
+            class="w-full"
+            appendTo="body"
+          ></p-select>
+          <small
+            *ngIf="
+              horarioForm.get('dia_semana')?.invalid &&
+              horarioForm.get('dia_semana')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar un día
+          </small>
+        </div>
+
+        <!-- Hora inicio -->
+        <div class="space-y-2">
+          <label
+            for="hora_inicio"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Hora inicio *
+          </label>
+          <p-datepicker
+            formControlName="hora_inicio"
+            [showTime]="true"
+            [timeOnly]="true"
+            [showSeconds]="false"
+            hourFormat="24"
+            placeholder="Selecciona hora"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-datepicker>
+          <small
+            *ngIf="
+              horarioForm.get('hora_inicio')?.invalid &&
+              horarioForm.get('hora_inicio')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar una hora de inicio
+          </small>
+        </div>
+
+        <!-- Hora fin -->
+        <div class="space-y-2">
+          <label for="hora_fin" class="block text-sm font-medium text-gray-700">
+            Hora fin *
+          </label>
+          <p-datepicker
+            formControlName="hora_fin"
+            [showTime]="true"
+            [timeOnly]="true"
+            [showSeconds]="false"
+            hourFormat="24"
+            placeholder="Selecciona hora"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-datepicker>
+          <small
+            *ngIf="
+              horarioForm.get('hora_fin')?.invalid &&
+              horarioForm.get('hora_fin')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar una hora de fin
+          </small>
+        </div>
+
+        <!-- Salón -->
+        <div class="space-y-2">
+          <label for="salon" class="block text-sm font-medium text-gray-700">
+            Salón
+          </label>
+          <app-salon-autocomplete
+            formControlName="salon"
+          ></app-salon-autocomplete>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-lg"
+        (click)="visibleChange.emit(false)"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Guardar cambios"
+        icon="pi pi-check"
+        severity="info"
+        [disabled]="horarioForm.invalid"
+        (click)="onSubmit()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

@@ -1,0 +1,6 @@
+<p-dialog (visibleChange)="visibleChange.emit($event)" [(visible)]="visible" [style]="{width: '75vw'}"
+  [header]="title | translate" [modal]="true" class="p-fluid">
+  <app-custom-form (onSubmit)="returnSubmit()" (onCancel)="returnCancel()" [inputFields]="inputFields" [form]="form"
+    [title]="title" [submitLabel]="submitLabel" [cancelLabel]="cancelLabel" [showViewToggle]="false"
+    [gridCols]="gridCols" [showTitle]="false"></app-custom-form>
+</p-dialog>

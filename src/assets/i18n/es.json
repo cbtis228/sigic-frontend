@@ -1,0 +1,112 @@
+{
+  "core": {
+    "app-name": "SIGIC",
+    "initial": {
+      "title": "Configuracion Inicial del Sistema",
+      "save-and-continue": "Guardar y Continuar"
+    },
+    "table": {
+      "actions": "Acciones",
+      "search": "Buscar",
+      "filter": "Filtrar",
+      "cancel": "Cancelar",
+      "reset": "Reiniciar",
+      "new": "Nuevo",
+      "pagination": {
+        "showing": "Mostrando",
+        "of": "de"
+      },
+      "empty":{
+        "title":"No se encontraron resultados",
+        "subtitle": "Intente ajustar los filstros de búsqueda o cree un nuevo registro."
+      },
+      "status-active": "Activo",
+      "status-suspended": "Suspendido",
+      "status-canceled": "Cancelado",
+      "status-deleted": "Eliminado",
+      "actions-menu": {
+        "print": "Imprimir",
+        "details": "Detalles",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "activate": "Activar",
+        "suspend": "Suspender",
+        "cancel": "Cancelar",
+        "change-password": "Cambiar Contraseña",
+        "grant-permissions": "Otorgar Permisos"
+      }
+    },
+    "menu": {
+      "users": "Usuarios",
+      "profiles": "Perfiles",
+      "catalogs": "Catálogos",
+      "settings": "Configuración",
+      "general": "Configuración General"
+    },
+    "form": {
+      "buttons": {
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      },
+      "errors": {
+        "required": "Este campo es obligatorio",
+        "min-length": "Favor de ingresar al menos {0} caracteres",
+        "max-length": "Favor de ingresar un máximo de {0} caracteres",
+        "email": "El email ingresado no es válido",
+        "pattern": "El valor ingresado no es válido",
+        "password": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.",
+        "password-confirm": "Las contraseñas ingresadas no coinciden",
+        "min": "El valor ingresado debe ser mayor a {0}",
+        "max": "El valor ingresado debe ser menor a {0}"
+      }
+    }
+  },
+  "ubicaciones":{
+    "title": "Ubicaciones",
+    "form": {
+      "descripcion": "Descripcion",
+      "estatus": "Estatus"
+    },
+    "table": {
+      "id": "ID",
+      "descripcion": "Descripcion",
+      "estatus": "Estatus",
+      "actions": "Acciones"
+    }
+  },
+  "users": {
+    "title": "Usuarios",
+    "form": {
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "profile_id": "Perfil",
+      "status": "Status"
+    },
+    "table": {
+      "id": "ID",
+      "email": "Correo electrónico",
+      "profile": "Perfil",
+      "status": "Status",
+      "actions": "Acciones"
+    }
+  },
+  "profiles": {
+    "title": "Perfiles",
+    "form": {
+      "name": "Nombre del Perfil",
+      "status": "Status"
+    },
+    "table": {
+      "id": "ID",
+      "name": "Perfil",
+      "status": "Status",
+      "actions": "Acciones"
+    }
+  },
+  "permissions": {
+    "title": "Permisos"
+  },
+  "errors":{
+    "invalid-form":"Hay campos faltantes o con datos erroneos."
+  }
+}

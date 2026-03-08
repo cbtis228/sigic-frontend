@@ -1,0 +1,293 @@
+<div class="min-h-screen p-4">
+  <div class="mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
+      <div
+        class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4"
+      >
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800">Planes de estudio</h1>
+          <p class="text-gray-600 mt-2">Administra los planes de estudio</p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <p-button
+            *ngIf="permissionsService.has$('academico.add_planestudio') | async"
+            icon="pi pi-plus"
+            label="Nuevo Plan De Estudio"
+            severity="success"
+            class="custom-success-btn"
+            routerLink="create"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="!planEstudioData"
+      class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100"
+    >
+      <div class="animate-pulse space-y-4">
+        <div class="flex gap-4 mb-6">
+          <div class="h-12 bg-gray-100 rounded-lg flex-1"></div>
+          <div class="h-12 bg-gray-100 rounded-lg w-24"></div>
+        </div>
+        <div
+          *ngFor="let item of [1, 2, 3, 4, 5]"
+          class="grid grid-cols-5 gap-4"
+        >
+          <div class="h-4 bg-gray-100 rounded"></div>
+          <div class="h-4 bg-gray-200 rounded col-span-2"></div>
+          <div class="h-4 bg-gray-100 rounded"></div>
+          <div class="h-4 bg-gray-100 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="planEstudioData"
+      class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100"
+    >
+      <div
+        class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6"
+      >
+        <div class="relative flex-1 max-w-md">
+          <span class="flex p-input-icon-left w-full">
+            <input
+              pInputText
+              type="text"
+              (input)="onGlobalFilterChange($event)"
+              placeholder="Buscar planes de estudio..."
+              class="w-full"
+            />
+          </span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <p-button
+            icon="pi pi-filter"
+            severity="secondary"
+            (click)="dt.reset()"
+            label="Limpiar"
+            class="custom-secondary-btn"
+          />
+        </div>
+      </div>
+
+      <p-table
+        #dt
+        *ngIf="planEstudioData"
+        [paginator]="true"
+        [rowHover]="true"
+        [rows]="10"
+        [value]="planEstudioData.results"
+        [paginator]="true"
+        [totalRecords]="planEstudioData.count"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [lazy]="true"
+        (onLazyLoad)="onTableEvent($event)"
+        [lazyLoadOnInit]="false"
+        [globalFilterFields]="[
+          'id',
+          'nombre',
+          'materias_nombre',
+          'materias',
+          'vigencia_inicio',
+          'vigencia_fin',
+          'estatus',
+        ]"
+        dataKey="id"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Mostrando de {first} a {last} de un total de {totalRecords} planes de estudio"
+        [showCurrentPageReport]="true"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">
+              <div class="flex justify-between items-center gap-2">
+                ID Plan Estudio
+                <p-sortIcon field="id" />
+                <p-columnFilter
+                  type="text"
+                  field="id"
+                  filterOn="input"
+                  display="menu"
+                  matchMode="contains"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th pSortableColumn="nombre">
+              <div class="flex justify-between items-center gap-2">
+                Nombre
+                <p-sortIcon field="nombre" />
+                <p-columnFilter
+                  type="text"
+                  field="nombre"
+                  display="menu"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th pSortableColumn="materias">
+              <div class="flex justify-between items-center gap-2">
+                Materias
+                <p-sortIcon field="materias" />
+                <p-columnFilter
+                  type="text"
+                  field="materias"
+                  display="menu"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th pSortableColumn="nivel">
+              <div class="flex justify-between items-center gap-2">
+                Nivel
+                <p-sortIcon field="nivel" />
+                <p-columnFilter
+                  type="text"
+                  field="nivel"
+                  display="menu"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th pSortableColumn="vigencia_inicio">
+              <div class="flex justify-between items-center gap-2">
+                Vigencia Inicio
+                <p-sortIcon field="vigencia_inicio" />
+                <p-columnFilter
+                  type="date"
+                  field="vigencia_inicio"
+                  display="menu"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th pSortableColumn="vigencia_fin">
+              <div class="flex justify-between items-center gap-2">
+                Vigencia Fin
+                <p-sortIcon field="vigencia_fin" />
+                <p-columnFilter
+                  type="date"
+                  field="vigencia_fin"
+                  display="menu"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th pSortableColumn="estatus">
+              <div class="flex justify-between items-center gap-2">
+                Estatus
+                <p-sortIcon field="estatus" />
+                <p-columnFilter
+                  type="text"
+                  field="estatus"
+                  display="menu"
+                  class="ml-auto"
+                />
+              </div>
+            </th>
+
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+
+        <ng-template #body let-planEstudio let-expanded="expanded">
+          <tr>
+            <td>{{ planEstudio.id }}</td>
+            <td>{{ planEstudio.nombre }}</td>
+            <td>
+              <p-button
+                type="button"
+                pRipple
+                [pRowToggler]="planEstudio"
+                [text]="true"
+                severity="secondary"
+                [rounded]="true"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              />
+            </td>
+            <td>{{ planEstudio.nivel || "-" }}</td>
+            <td>{{ planEstudio.vigencia_inicio || "-" }}</td>
+            <td>{{ planEstudio.vigencia_fin || "-" }}</td>
+            <td class="custom-body-cell">
+              <span
+                class="px-3 py-1 rounded-full text-xs font-medium"
+                [ngClass]="{
+                  'bg-green-100 text-green-800': planEstudio.estatus === 1,
+                  'bg-orange-100 text-orange-800': planEstudio.estatus === 2,
+                }"
+              >
+                {{ planEstudio.estatus | defaultEstatusValue }}
+              </span>
+            </td>
+            <td class="custom-body-cell">
+              <div class="flex items-center gap-2">
+                <p-menu
+                  #menu
+                  [model]="menuItems"
+                  appendTo="body"
+                  [popup]="true"
+                ></p-menu>
+                <p-button
+                  icon="pi pi-ellipsis-v"
+                  severity="secondary"
+                  [rounded]="true"
+                  [text]="true"
+                  class="custom-action-btn"
+                  (click)="updateMenuItems(planEstudio); menu.toggle($event)"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #expandedrow let-planEstudio>
+          <tr>
+            <td colspan="8">
+              <div class="p-4">
+                <p-table [value]="planEstudio.materias" dataKey="id">
+                  <ng-template #header>
+                    <tr>
+                      <th pSortableColumn="id">
+                        <div class="flex items-center gap-2">
+                          ID
+                          <p-sortIcon field="price" />
+                        </div>
+                      </th>
+                      <th pSortableColumn="nombre">
+                        <div class="flex items-center gap-2">
+                          Nombre
+                          <p-sortIcon field="nombre" />
+                        </div>
+                      </th>
+                      <th pSortableColumn="clave">
+                        <div class="flex items-center gap-2">
+                          Clave
+                          <p-sortIcon field="clave" />
+                        </div>
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template #body let-materia>
+                    <tr>
+                      <td>{{ materia.id }}</td>
+                      <td>{{ materia.nombre }}</td>
+                      <td>{{ materia.clave }}</td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

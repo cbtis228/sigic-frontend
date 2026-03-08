@@ -1,0 +1,218 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  styleClass="h-3/4 w-full md:w-3/4"
+  [closable]="true"
+  (onHide)="visibleChange.emit(false)"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-lg font-semibold">Registrar Incidencia</h2>
+  </ng-template>
+
+  <form
+    [formGroup]="incidenciaForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4"
+  >
+    <!-- Inscripción -->
+    <div>
+      <label
+        class="block text-sm font-medium mb-1"
+        [ngClass]="{
+          'text-red-600':
+            incidenciaForm.get('inscripcion')?.invalid &&
+            incidenciaForm.get('inscripcion')?.touched,
+        }"
+      >
+        Inscripción *
+      </label>
+      <app-inscripcion-autocomplete
+        formControlName="inscripcion"
+        [ngClass]="{
+          'border-red-500 focus:ring-red-500':
+            incidenciaForm.get('inscripcion')?.invalid &&
+            incidenciaForm.get('inscripcion')?.touched,
+        }"
+      ></app-inscripcion-autocomplete>
+      <p
+        *ngIf="
+          incidenciaForm.get('inscripcion')?.invalid &&
+          incidenciaForm.get('inscripcion')?.touched
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <!-- Tipo -->
+    <div>
+      <label
+        class="block text-sm font-medium mb-1"
+        [ngClass]="{
+          'text-red-600':
+            incidenciaForm.get('tipo')?.invalid &&
+            incidenciaForm.get('tipo')?.touched,
+        }"
+      >
+        Tipo *
+      </label>
+      <p-select
+        [options]="tiposIncidencia"
+        formControlName="tipo"
+        class="w-full"
+        [ngClass]="{
+          'border border-red-500 rounded-md':
+            incidenciaForm.get('tipo')?.invalid &&
+            incidenciaForm.get('tipo')?.touched,
+        }"
+      ></p-select>
+      <p
+        *ngIf="
+          incidenciaForm.get('tipo')?.invalid &&
+          incidenciaForm.get('tipo')?.touched
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Seleccione un tipo
+      </p>
+    </div>
+
+    <!-- Fecha -->
+    <div>
+      <label
+        class="block text-sm font-medium mb-1"
+        [ngClass]="{
+          'text-red-600':
+            incidenciaForm.get('fecha')?.invalid &&
+            incidenciaForm.get('fecha')?.touched,
+        }"
+      >
+        Fecha *
+      </label>
+      <p-datepicker
+        formControlName="fecha"
+        [style]="{ width: '100%' }"
+        [showIcon]="true"
+        [ngClass]="{
+          'border border-red-500 rounded-md':
+            incidenciaForm.get('fecha')?.invalid &&
+            incidenciaForm.get('fecha')?.touched,
+        }"
+      ></p-datepicker>
+      <p
+        *ngIf="
+          incidenciaForm.get('fecha')?.invalid &&
+          incidenciaForm.get('fecha')?.touched
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Seleccione una fecha
+      </p>
+    </div>
+
+    <!-- Descripción -->
+    <div>
+      <label
+        class="block text-sm font-medium mb-1"
+        [ngClass]="{
+          'text-red-600':
+            incidenciaForm.get('descripcion')?.invalid &&
+            incidenciaForm.get('descripcion')?.touched,
+        }"
+      >
+        Descripción *
+      </label>
+      <textarea
+        rows="3"
+        pTextarea
+        class="w-full p-2 border rounded-md focus:ring-2"
+        formControlName="descripcion"
+        [ngClass]="{
+          'border-red-500 focus:ring-red-500':
+            incidenciaForm.get('descripcion')?.invalid &&
+            incidenciaForm.get('descripcion')?.touched,
+        }"
+      ></textarea>
+      <p
+        *ngIf="
+          incidenciaForm.get('descripcion')?.invalid &&
+          incidenciaForm.get('descripcion')?.touched
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <!-- Gravedad -->
+    <div>
+      <label
+        class="block text-sm font-medium mb-1"
+        [ngClass]="{
+          'text-red-600':
+            incidenciaForm.get('gravedad')?.invalid &&
+            incidenciaForm.get('gravedad')?.touched,
+        }"
+      >
+        Gravedad *
+      </label>
+      <p-select
+        [options]="nivelesGravedad"
+        formControlName="gravedad"
+        class="w-full"
+        [ngClass]="{
+          'border border-red-500 rounded-md':
+            incidenciaForm.get('gravedad')?.invalid &&
+            incidenciaForm.get('gravedad')?.touched,
+        }"
+      ></p-select>
+      <p
+        *ngIf="
+          incidenciaForm.get('gravedad')?.invalid &&
+          incidenciaForm.get('gravedad')?.touched
+        "
+        class="text-red-500 text-xs mt-1"
+      >
+        Seleccione la gravedad
+      </p>
+    </div>
+
+    <!-- Medidas tomadas -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Medidas Tomadas</label>
+      <textarea
+        formControlName="medidas_tomadas"
+        rows="2"
+        class="w-full p-2 border rounded-md"
+      ></textarea>
+    </div>
+
+    <!-- Seguimiento -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Seguimiento</label>
+      <textarea
+        formControlName="seguimiento"
+        rows="2"
+        class="w-full p-2 border rounded-md"
+      ></textarea>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-2 pt-4">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        (click)="visibleChange.emit(false)"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        [disabled]="incidenciaForm.invalid"
+        severity="success"
+        label="Guardar"
+      ></button>
+    </div>
+  </form>
+</p-dialog>

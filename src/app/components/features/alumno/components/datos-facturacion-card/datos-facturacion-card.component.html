@@ -1,0 +1,70 @@
+<app-card-with-title [title]="'Datos de Facturación'">
+  <div class="p-6 w-full h-full">
+    <ng-container *ngIf="loading; else dataLoaded">
+      <div class="flex justify-center mb-4">
+        <div class="w-24 h-24 rounded-full bg-gray-200 animate-pulse"></div>
+      </div>
+
+      <div class="space-y-3">
+        <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+        <div class="h-4 bg-gray-200 rounded w-2/3 animate-pulse"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/2 animate-pulse"></div>
+        <div class="h-4 bg-gray-200 rounded w-2/4 animate-pulse"></div>
+        <div class="h-4 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+        <div class="h-4 bg-gray-200 rounded w-2/5 animate-pulse"></div>
+      </div>
+    </ng-container>
+
+    <ng-template #dataLoaded>
+      <!-- Icono centrado -->
+      <div class="flex justify-center mb-4">
+        <div
+          class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center"
+        >
+          <svg
+            class="w-16 h-16 text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M19 3H5c-1.1 0-2 .9-2 2v14c0
+                 1.1.9 2 2 2h14c1.1 0 2-.9
+                 2-2V5c0-1.1-.9-2-2-2zm0
+                 16H5V5h14v14zM7 9h10v2H7V9zm0
+                 4h10v2H7v-2z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Info de facturación -->
+      <div class="space-y-1 text-sm">
+        <p>
+          <span class="font-semibold text-gray-600">RFC:</span>
+          {{ datosFacturacion?.rfc || "Sin registrar" }}
+        </p>
+        <p>
+          <span class="font-semibold text-gray-600">Razón Social:</span>
+          {{ datosFacturacion?.razon_social || "Sin registrar" }}
+        </p>
+        <p>
+          <span class="font-semibold text-gray-600">Código Postal:</span>
+          {{ datosFacturacion?.codigo_postal || "Sin registrar" }}
+        </p>
+        <p>
+          <span class="font-semibold text-gray-600">Régimen Fiscal:</span>
+          {{ datosFacturacion?.regimen_fiscal || "Sin registrar" }}
+        </p>
+        <p>
+          <span class="font-semibold text-gray-600">Uso de Factura:</span>
+          {{ datosFacturacion?.uso_factura || "Sin registrar" }}
+        </p>
+        <p>
+          <span class="font-semibold text-gray-600">Domicilio Fiscal:</span>
+          {{ datosFacturacion?.domicilio_fiscal || "Sin registrar" }}
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</app-card-with-title>
+

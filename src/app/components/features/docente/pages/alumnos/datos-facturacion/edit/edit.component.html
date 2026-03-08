@@ -1,0 +1,7 @@
+<div class="p-4">
+  <app-edit-datos-facturacion-alumno-card
+    [datosFacturacion]="datosFacturacion"
+    [showSkeletons]="!datosFacturacion"
+    (updatedDatosFacturacion)="onSubmit($event)"
+  ></app-edit-datos-facturacion-alumno-card>
+</div>

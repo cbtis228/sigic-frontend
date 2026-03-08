@@ -1,0 +1,87 @@
+<p-dialog
+  [(visible)]="visible"
+  (onHide)="visibleChange.emit(false)"
+  [style]="{ width: '28rem' }"
+  header="Subir documento"
+  modal="true"
+  [closable]="false"
+>
+  <div class="flex flex-col gap-4">
+
+    <!-- Tipo de archivo -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Tipo de documento
+      </label>
+      <p-select
+        [options]="tipoFileDocente"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Selecciona un tipo"
+        [(ngModel)]="selectedTipo"
+        class="w-full"
+      ></p-select>
+    </div>
+
+    <!-- Dropzone -->
+    <div
+      class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary-500 transition-colors cursor-pointer"
+      (click)="fileInput.click()"
+    >
+      <i class="pi pi-cloud-upload text-4xl text-primary-500 mb-3 block"></i>
+      <p class="font-medium text-gray-800">Arrastra tu archivo aquí</p>
+      <p class="text-sm text-gray-500">o haz clic para seleccionarlo</p>
+      <p class="text-xs text-gray-400 mt-2">
+        PDF, imágenes, Word, Excel · máx. 10MB
+      </p>
+    </div>
+
+    <!-- Input real -->
+    <input
+      #fileInput
+      type="file"
+      class="hidden"
+      (change)="onFileSelected($event)"
+      accept=".pdf,.jpg,.jpeg,.png,.doc,.docx,.xls,.xlsx,.csv"
+    />
+
+    <!-- Archivo seleccionado -->
+    <div
+      *ngIf="selectedFile"
+      class="flex items-center justify-between bg-gray-50 border rounded-md p-3"
+    >
+      <div class="flex items-center gap-2">
+        <i class="pi pi-file text-primary-500"></i>
+        <span class="text-sm text-gray-800 truncate max-w-[14rem]">
+          {{ selectedFile.name }}
+        </span>
+      </div>
+      <button
+        pButton
+        icon="pi pi-times"
+        class="p-button-text p-button-sm text-gray-400 hover:text-red-500"
+        (click)="removeSelectedFile()"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <button
+        pButton
+        label="Cancelar"
+        class="p-button-text"
+        (click)="onCancelUpload()"
+      ></button>
+      <button
+        pButton
+        label="Subir"
+        icon="pi pi-upload"
+        class="p-button-primary"
+        [disabled]="!selectedFile || !selectedTipo"
+        (click)="uploadSelectedFile()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

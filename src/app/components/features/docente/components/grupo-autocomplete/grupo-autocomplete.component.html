@@ -1,0 +1,20 @@
+<div class="w-full">
+  <p-autocomplete
+    id="docente-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    appendTo="body"
+    [showClear]="showClear"
+    (completeMethod)="filterGrupos($event)"
+    (onSelect)="onGrupoSelect($event)"
+    (onClear)="onGrupoClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="grupos"
+    [(ngModel)]="selectedGrupo"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    optionLabel="nombre_grupo"
+    class="w-full shadow-sm rounded-lg"
+  >
+  </p-autocomplete>
+</div>
