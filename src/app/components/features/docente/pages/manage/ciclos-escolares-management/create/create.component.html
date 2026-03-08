@@ -1,0 +1,190 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
+  <div class="max-w-4xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
+      <div class="flex items-center gap-3 mb-4">
+        <button
+          routerLink=".."
+          class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-arrow-left text-gray-600"></i>
+        </button>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Crear Ciclo Escolar</h1>
+          <p class="text-gray-600">Completa la información del ciclo escolar</p>
+        </div>
+      </div>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onCicloEscolarSave()"
+      class="space-y-6"
+    >
+      <app-card-with-title [title]="'Información del Ciclo Escolar'">
+        <div class="space-y-6">
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-calendar text-blue-500"></i>
+              Detalles del Ciclo
+            </h2>
+
+            <div class="grid grid-cols-1 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="nombre_ciclo"
+                  class="text-sm font-medium text-gray-700"
+                >
+                  Nombre del Ciclo Escolar *
+                </label>
+                <input
+                  id="nombre_ciclo"
+                  type="text"
+                  formControlName="nombre_ciclo"
+                  pInputText
+                  placeholder="Ej: Ciclo 2024-2025"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('nombre_ciclo')?.invalid &&
+                      form.get('nombre_ciclo')?.touched,
+                    'border-green-300':
+                      form.get('nombre_ciclo')?.valid &&
+                      form.get('nombre_ciclo')?.touched,
+                  }"
+                />
+                <small
+                  *ngIf="
+                    form.get('nombre_ciclo')?.invalid &&
+                    form.get('nombre_ciclo')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El nombre del ciclo es requerido
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-clock text-blue-500"></i>
+              Fechas del Ciclo
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="fecha_inicio"
+                  class="text-sm font-medium text-gray-700"
+                >
+                  Fecha de Inicio *
+                </label>
+                <p-datepicker
+                  id="fecha_inicio"
+                  formControlName="fecha_inicio"
+                  [showIcon]="true"
+                  dateFormat="yy-mm-dd"
+                  placeholder="Seleccione la fecha"
+                  appendTo="body"
+                  inputClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('fecha_inicio')?.invalid &&
+                      form.get('fecha_inicio')?.touched,
+                    'border-green-300':
+                      form.get('fecha_inicio')?.valid &&
+                      form.get('fecha_inicio')?.touched,
+                  }"
+                ></p-datepicker>
+                <small
+                  *ngIf="
+                    form.get('fecha_inicio')?.invalid &&
+                    form.get('fecha_inicio')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  La fecha de inicio es requerida
+                </small>
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="fecha_fin"
+                  class="text-sm font-medium text-gray-700"
+                >
+                  Fecha de Fin *
+                </label>
+                <p-datepicker
+                  id="fecha_fin"
+                  formControlName="fecha_fin"
+                  [showIcon]="true"
+                  dateFormat="yy-mm-dd"
+                  placeholder="Seleccione la fecha"
+                  appendTo="body"
+                  inputClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('fecha_fin')?.invalid &&
+                      form.get('fecha_fin')?.touched,
+                    'border-green-300':
+                      form.get('fecha_fin')?.valid &&
+                      form.get('fecha_fin')?.touched,
+                  }"
+                ></p-datepicker>
+                <small
+                  *ngIf="
+                    form.get('fecha_fin')?.invalid &&
+                    form.get('fecha_fin')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  La fecha de fin es requerida
+                </small>
+                <small
+                  *ngIf="
+                    form.get('fecha_fin')?.valid &&
+                    form.get('fecha_inicio')!.value >=
+                      form.get('fecha_fin')!.value
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  La fecha de fin no puede ser menor o igual a la fecha de
+                  inicio
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3 pt-6">
+        <button
+          pButton
+          type="button"
+          severity="secondary"
+          icon="pi pi-arrow-left"
+          label="Cancelar"
+          routerLink=".."
+        ></button>
+
+        <button
+          pButton
+          type="submit"
+          severity="info"
+          icon="pi pi-check-square"
+          iconPos="right"
+          label="Guardar Ciclo"
+          [disabled]="form.invalid"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>

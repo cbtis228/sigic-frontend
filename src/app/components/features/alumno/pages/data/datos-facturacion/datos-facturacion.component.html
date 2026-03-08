@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-6 p-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold text-gray-800">Datos de Facturación</h2>
+    <p-button
+      label="Editar"
+      severity="info"
+      icon="pi pi-pencil"
+      routerLink="edit"
+    />
+  </div>
+  <div class="w-full max-w-4xl mx-auto">
+    <app-datos-facturacion-card
+      [loading]="!datosFacturacion"
+      [datosFacturacion]="datosFacturacion"
+    ></app-datos-facturacion-card>
+  </div>
+</div>
+

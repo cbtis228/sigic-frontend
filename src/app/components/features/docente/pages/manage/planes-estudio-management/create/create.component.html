@@ -1,0 +1,198 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
+      <div class="flex items-center gap-3 mb-4">
+        <button
+          routerLink=".."
+          class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-arrow-left text-gray-600"></i>
+        </button>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Crear Plan de Estudio</h1>
+          <p class="text-gray-600">Completa la información del plan de estudio</p>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onPlanEstudioSave()" class="space-y-6">
+      <app-card-with-title [title]="'Información del Plan de Estudio'">
+        <div class="space-y-6">
+          <div class="border-b border-gray-200 pb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="pi pi-book text-blue-500"></i>
+              Información Básica
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="nombre" class="text-sm font-medium text-gray-700 flex items-center gap-1">
+                  Nombre *
+                </label>
+                <input
+                  pInputText
+                  id="nombre"
+                  placeholder="Ej: Plan 2025 - Ingeniería en Sistemas"
+                  formControlName="nombre"
+                  class="w-full"
+                  [ngClass]="{
+                    'p-invalid':
+                      form.get('nombre')?.invalid &&
+                      form.get('nombre')?.touched,
+                  }"
+                />
+                <small
+                  *ngIf="
+                    form.get('nombre')?.invalid && form.get('nombre')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El nombre es requerido
+                </small>
+              </div>
+
+              <div class="space-y-2">
+                <label for="nivel" class="text-sm font-medium text-gray-700 flex items-center gap-1">
+                  Nivel *
+                </label>
+                <input
+                  pInputText
+                  type="text"
+                  formControlName="nivel"
+                  id="nivel"
+                  class="w-full"
+                  [ngClass]="{
+                    'p-invalid':
+                      form.get('nivel')?.invalid &&
+                      form.get('nivel')?.touched,
+                  }"
+                />
+                <small
+                  class="text-red-500 text-xs"
+                  *ngIf="
+                    form.get('nivel')?.invalid && form.get('nivel')?.touched
+                  "
+                >
+                  El nivel es requerido
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="pi pi-calendar text-blue-500"></i>
+              Vigencia
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="vigencia_inicio" class="text-sm font-medium text-gray-700 flex items-center gap-1">
+                  Vigencia Inicio *
+                </label>
+                <p-datepicker
+                  formControlName="vigencia_inicio"
+                  id="vigencia_inicio"
+                  [style]="{ width: '100%' }"
+                  appendTo="body"
+                  placeholder="Selecciona una fecha"
+                  [ngClass]="{
+                    'p-invalid':
+                      form.get('vigencia_inicio')?.invalid &&
+                      form.get('vigencia_inicio')?.touched,
+                  }"
+                ></p-datepicker>
+                <small
+                  class="text-red-500 text-xs"
+                  *ngIf="
+                    form.get('vigencia_inicio')?.invalid && form.get('vigencia_inicio')?.touched
+                  "
+                >
+                  La vigencia de inicio es requerida
+                </small>
+              </div>
+
+              <div class="space-y-2">
+                <label for="vigencia_fin" class="text-sm font-medium text-gray-700 flex items-center gap-1">
+                  Vigencia Fin *
+                </label>
+                <p-datepicker
+                  formControlName="vigencia_fin"
+                  id="vigencia_fin"
+                  [style]="{ width: '100%' }"
+                  appendTo="body"
+                  placeholder="Selecciona una fecha"
+                  [ngClass]="{
+                    'p-invalid':
+                      form.get('vigencia_fin')?.invalid &&
+                      form.get('vigencia_fin')?.touched,
+                  }"
+                ></p-datepicker>
+                <small
+                  class="text-red-500 text-xs"
+                  *ngIf="
+                    form.get('vigencia_fin')?.invalid && form.get('vigencia_fin')?.touched
+                  "
+                >
+                  La vigencia de fin es requerida
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <i class="pi pi-list text-blue-500"></i>
+              Materias
+            </h2>
+
+            <div class="grid grid-cols-1">
+              <div class="space-y-2">
+                <label for="materias" class="text-sm font-medium text-gray-700 flex items-center gap-1">
+                  Materias *
+                </label>
+                <app-materia-autocomplete
+                  formControlName="materias"
+                  [forceSelection]="true"
+                  [multiple]="true"
+                ></app-materia-autocomplete>
+                <small
+                  class="text-red-500 text-xs"
+                  *ngIf="
+                    form.get('materias')?.invalid && form.get('materias')?.touched
+                  "
+                >
+                  Al menos una materia es requerida
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3 pt-6">
+        <button
+          pButton
+          type="button"
+          severity="secondary"
+          icon="pi pi-arrow-left"
+          label="Regresar"
+          routerLink=".."
+          class="px-4 py-2"
+        ></button>
+
+        <button
+          pButton
+          type="submit"
+          severity="info"
+          icon="pi pi-check-square"
+          iconPos="right"
+          label="Guardar Plan de Estudio"
+          [disabled]="form.invalid"
+          class="px-4 py-2"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>

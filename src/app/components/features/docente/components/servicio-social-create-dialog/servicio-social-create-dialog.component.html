@@ -1,0 +1,56 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  styleClass="h-2/3 w-full md:w-3/4"
+  [closable]="true"
+  (onHide)="visibleChange.emit(false)"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-lg font-semibold">Registrar Servicio Social</h2>
+  </ng-template>
+
+  <form
+    [formGroup]="servicioForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4"
+  >
+    <!-- Alumno -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Alumno *</label>
+      <app-alumno-autocomplete formControlName="alumno"></app-alumno-autocomplete>
+      <p *ngIf="servicioForm.get('alumno')?.invalid && servicioForm.get('alumno')?.touched"
+        class="text-red-500 text-xs mt-1">Este campo es obligatorio</p>
+    </div>
+
+    <!-- Actividad -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Actividad *</label>
+      <input type="text" pInputText formControlName="actividad" class="w-full" />
+    </div>
+
+    <!-- Fecha inicio -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Fecha Inicio *</label>
+      <p-datepicker appendTo="body" formControlName="fecha_inicio" [showIcon]="true" [style]="{ width: '100%' }"></p-datepicker>
+    </div>
+
+    <!-- Fecha fin -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Fecha Fin</label>
+      <p-datepicker appendTo="body" formControlName="fecha_fin" [showIcon]="true" [style]="{ width: '100%' }"></p-datepicker>
+    </div>
+
+    <!-- Responsable -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Responsable *</label>
+      <input type="text" pInputText formControlName="responsable" class="w-full" />
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-2 pt-4">
+      <button pButton type="button" label="Cancelar" (click)="visibleChange.emit(false)"></button>
+      <button pButton type="submit" [disabled]="servicioForm.invalid" severity="success" label="Guardar"></button>
+    </div>
+  </form>
+</p-dialog>
+

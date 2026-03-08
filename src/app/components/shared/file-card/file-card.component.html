@@ -1,0 +1,65 @@
+<div
+  class="file-card border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+>
+  <div class="flex items-start gap-3">
+    <!-- Icono -->
+    <div class="file-icon">
+      <i
+        class="pi text-2xl"
+        [ngClass]="{
+          'pi-file-pdf text-red-500': file.file_type.includes('pdf'),
+          'pi-image text-green-500': file.file_type.includes('image'),
+          'pi-file-excel text-green-600':
+            file.file_type.includes('csv') || file.file_type.includes('excel'),
+          'pi-file text-gray-500':
+            !file.file_type.includes('pdf') &&
+            !file.file_type.includes('image') &&
+            !file.file_type.includes('csv') &&
+            !file.file_type.includes('excel')
+        }"
+      ></i>
+    </div>
+
+    <div class="file-info flex-1 min-w-0">
+      <h4
+        class="font-medium text-gray-800 text-sm truncate"
+        [title]="file.original_name"
+      >
+        {{ file.original_name }}
+      </h4>
+
+      <p class="text-xs text-gray-500 mt-1">
+        {{ file.upload_date | date : "dd 'de' MMMM, yyyy - HH:mm" }}
+      </p>
+
+      <p class="text-xs text-gray-500">
+        {{ file.file_size / 1024 | number : "1.0-2" }} KB
+      </p>
+    </div>
+
+    <!-- Acciones -->
+    <div class="file-actions flex items-center gap-2">
+      <!-- Descargar -->
+      <button
+        pButton
+        *ngIf="showDownload"
+        icon="pi pi-download"
+        class="p-button-text p-button-sm p-button-success"
+        (click)="onClickDownload.emit(file)"
+        pTooltip="Descargar archivo"
+        tooltipPosition="top"
+      ></button>
+
+      <!-- Eliminar -->
+      <button
+        pButton
+        *ngIf="showDelete"
+        icon="pi pi-trash"
+        class="p-button-text p-button-sm p-button-danger"
+        (click)="onClickDelete.emit(file)"
+        pTooltip="Eliminar archivo"
+        tooltipPosition="top"
+      ></button>
+    </div>
+  </div>
+</div>

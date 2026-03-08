@@ -1,0 +1,101 @@
+<div class="min-h-screen bg-gray-50 p-4 md:p-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+      >
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-3xl font-bold text-gray-800">
+              Centro de Descargas
+            </h1>
+            <span
+              *ngIf="cicloEscolar"
+              class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full"
+            >
+              {{ cicloEscolar.nombre_ciclo }}
+            </span>
+          </div>
+          <p class="text-gray-600 mt-2">
+            Descarga información completa de ciclos escolares
+          </p>
+
+          <div
+            *ngIf="cicloEscolar"
+            class="flex flex-wrap gap-4 mt-3 text-sm text-gray-500"
+          >
+            <div class="flex items-center">
+              <i class="pi pi-calendar mr-1"></i>
+              <span
+                >Inicio:
+                {{ cicloEscolar.fecha_inicio | date : "dd/MM/yyyy" }}</span
+              >
+            </div>
+            <div class="flex items-center">
+              <i class="pi pi-calendar-times mr-1"></i>
+              <span
+                >Fin: {{ cicloEscolar.fecha_fin | date : "dd/MM/yyyy" }}</span
+              >
+            </div>
+            <div class="flex items-center">
+              <i
+                class="pi pi-circle-fill mr-1"
+                [ngClass]="{
+                  'text-green-500': cicloEscolar.estatus === 1,
+                  'text-gray-500': cicloEscolar.estatus === 0,
+                }"
+              ></i>
+              <span>{{
+                cicloEscolar.estatus === 1 ? "Activo" : "Inactivo"
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full md:w-1/4">
+          <p-select
+            id="id"
+            class="w-full"
+            [(ngModel)]="cicloEscolar"
+            optionLabel="nombre_ciclo"
+            placeholder="Seleccione un ciclo escolar"
+            [filter]="true"
+            [options]="ciclosEscolares"
+          >
+          </p-select>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="cicloEscolar"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      <app-download-card
+        [title]="historialAcademicoCardTitle"
+        [description]="historialAcadermicoCardDescription"
+        [showCsvButton]="true"
+        [bulletPoints]="historialAcademicoCardBulletPoints"
+        (onClickDownloadCsv)="downloadHistorialAcademicoCSV()"
+      ></app-download-card>
+    </div>
+
+    <div
+      *ngIf="!cicloEscolar"
+      class="bg-white rounded-xl shadow-lg p-8 text-center"
+    >
+      <div class="flex justify-center mb-4">
+        <div class="bg-gray-100 p-4 rounded-full">
+          <i class="pi pi-cloud-download text-gray-400 text-4xl"></i>
+        </div>
+      </div>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">
+        Seleccione un ciclo escolar
+      </h3>
+      <p class="text-gray-500 max-w-md mx-auto">
+        Para acceder a las opciones de descarga, por favor seleccione un ciclo
+        escolar de la lista desplegable.
+      </p>
+    </div>
+  </div>
+</div>

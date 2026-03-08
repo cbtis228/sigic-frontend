@@ -1,0 +1,27 @@
+<!-- <header class="m-2 lg:m-4 p-2 lg:m-4">
+  <span class="text-2xl lg:text-4xl font-bold">{{'core.app-name' | translate}}</span>
+</header>
+<hr> -->
+<section class="m-2 lg:m-4 p-2 lg:m-4">
+  <span class="text-xl lg:text-2xl font-bold">
+    {{'core.initial.title' | translate}}
+  </span>
+  <hr class="mb-2">
+  <p-tabview [activeIndex]="step"
+    class="border-r border-b border-l border-t rounded-r rounded-b rounded-l rounded-t border-gray-600 dark:border-gray-200">
+    <p-tabPanel header="General" [disabled]="step !== 0">
+      <app-general [firstStart]="true" [(archivoLogo)]="archivoLogo" [(form)]="form"></app-general>
+      <div class="flex justify-end">
+        <p-button [label]="'core.initial.save-and-continue' | translate" [disabled]="!archivoLogo || form.invalid"
+          (onClick)="saveConfig()" class="mt-4"></p-button>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Usuario Administrador" [disabled]="step !== 1">
+      <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md flex-grow flex-1 px-8">
+        <div class="py-8 px-4 shadow sm:rounded-lg sm:px-10">
+
+        </div>
+      </div>
+    </p-tabPanel>
+  </p-tabview>
+</section>

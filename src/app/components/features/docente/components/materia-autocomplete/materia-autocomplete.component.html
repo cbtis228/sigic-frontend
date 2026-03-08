@@ -1,0 +1,25 @@
+<div class="w-full">
+  <p-autocomplete
+    id="docente-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    appendTo="body"
+    [showClear]="showClear"
+    (completeMethod)="filterMaterias($event)"
+    (onSelect)="onMateriaSelect($event)"
+    (onUnselect)="onMateriaUnselect($event)"
+    (onClear)="onMateriaClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="materias"
+    [(ngModel)]="selectedMateria"
+    [multiple]="multiple"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    optionLabel="clave"
+    class="w-full shadow-sm rounded-lg"
+  >
+    <ng-template let-materia pTemplate="item">
+      {{ materia.clave }} - {{ materia.nombre }}
+    </ng-template>
+  </p-autocomplete>
+</div>

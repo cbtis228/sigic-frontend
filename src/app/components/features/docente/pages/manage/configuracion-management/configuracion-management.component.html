@@ -1,0 +1,494 @@
+<div class="min-h-screen p-4 md:p-6 bg-gray-50">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
+      <div
+        class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4"
+      >
+        <div>
+          <h1 class="text-3xl font-bold">Configuración Institucional</h1>
+          <p class="opacity-90 mt-2">
+            Consulta y edita la información general de la institución
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <div
+            *ngIf="permissionsService.has$('core.change_configuracion') | async"
+          >
+            <button
+              *ngIf="!isEditing"
+              pButton
+              icon="pi pi-pencil"
+              label="Editar Configuración"
+              severity="info"
+              class="bg-white text-primary-700 hover:bg-gray-100 border-0"
+              (click)="onEdit()"
+            ></button>
+          </div>
+
+          <button
+            *ngIf="isEditing"
+            pButton
+            icon="pi pi-times"
+            label="Cancelar"
+            severity="secondary"
+            outlined
+            class="border-white text-white hover:bg-white/10"
+            (click)="onCancel()"
+          ></button>
+
+          <button
+            *ngIf="isEditing"
+            pButton
+            icon="pi pi-save"
+            label="Guardar Cambios"
+            severity="success"
+            class="bg-emerald-500 border-emerald-500 hover:bg-emerald-600"
+            [disabled]="!isFormValid() || isSaving"
+            (click)="onSave()"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skeleton -->
+    <div *ngIf="!configuracion" class="bg-white rounded-2xl shadow-lg p-8">
+      <div class="animate-pulse space-y-6">
+        <div class="h-6 bg-gray-200 rounded w-1/4 mb-8"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="space-y-4">
+            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-10 bg-gray-200 rounded"></div>
+          </div>
+          <div class="space-y-4">
+            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-10 bg-gray-200 rounded"></div>
+          </div>
+          <div class="space-y-4">
+            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-10 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido -->
+    <div *ngIf="configuracion" class="space-y-8">
+      <!-- Datos Generales -->
+      <div
+        class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
+      >
+        <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-6 border-b">
+          <h3
+            class="text-xl font-semibold text-gray-800 flex items-center gap-3"
+          >
+            <i class="pi pi-building text-primary-600 text-lg"></i>
+            <span>Datos Generales de la Institución</span>
+          </h3>
+          <p class="text-gray-600 text-sm mt-1 ml-9">
+            Información básica de identificación institucional
+          </p>
+        </div>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-id-card text-gray-400 text-sm"></i>
+                Nombre de la institución
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.nombre_institucion"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid':
+                    isEditing && !configuracion.nombre_institucion.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Nombre oficial completo</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.nombre_institucion.trim()"
+              >
+                El nombre de la institución es requerido
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-key text-gray-400 text-sm"></i>
+                Clave de centro
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.clave_centro"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.clave_centro.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Identificador oficial</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.clave_centro.trim()"
+              >
+                La clave de centro es requerida
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-sitemap text-gray-400 text-sm"></i>
+                Organismo
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.organismo"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.organismo.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Dependencia superior</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.organismo.trim()"
+              >
+                El organismo es requerido
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-building-columns text-gray-400 text-sm"></i>
+                Subsecretaría
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.subsecretaria"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.subsecretaria.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                Subsecretaría correspondiente
+              </p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.subsecretaria.trim()"
+              >
+                La subsecretaría es requerida
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dirección -->
+      <div
+        class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
+      >
+        <div
+          class="bg-gradient-to-r from-emerald-50 to-emerald-100 p-6 border-b"
+        >
+          <h3
+            class="text-xl font-semibold text-gray-800 flex items-center gap-3"
+          >
+            <i class="pi pi-map-marker text-emerald-600 text-lg"></i>
+            <span>Dirección de la Institución</span>
+          </h3>
+          <p class="text-gray-600 text-sm mt-1 ml-9">
+            Ubicación física y datos de localización
+          </p>
+        </div>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="md:col-span-2 space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-road text-gray-400 text-sm"></i>
+                Dirección completa
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.direccion"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.direccion.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Calle y número</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.direccion.trim()"
+              >
+                La dirección es requerida
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-home text-gray-400 text-sm"></i>
+                Colonia
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.colonia"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.colonia.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Colonia o sector</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.colonia.trim()"
+              >
+                La colonia es requerida
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-tag text-gray-400 text-sm"></i>
+                Código postal
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.codigo_postal"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.codigo_postal.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">C.P. de la ubicación</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.codigo_postal.trim()"
+              >
+                El código postal es requerido
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-globe text-gray-400 text-sm"></i>
+                Ciudad
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.ciudad"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.ciudad.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Ciudad o municipio</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.ciudad.trim()"
+              >
+                La ciudad es requerida
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-flag text-gray-400 text-sm"></i>
+                Estado
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.estado"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.estado.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Entidad federativa</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.estado.trim()"
+              >
+                El estado es requerido
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contacto y Director -->
+      <div
+        class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
+      >
+        <div class="bg-gradient-to-r from-purple-50 to-purple-100 p-6 border-b">
+          <h3
+            class="text-xl font-semibold text-gray-800 flex items-center gap-3"
+          >
+            <i class="pi pi-users text-purple-600 text-lg"></i>
+            <span>Contacto y Dirección General</span>
+          </h3>
+          <p class="text-gray-600 text-sm mt-1 ml-9">
+            Información de contacto y datos del director
+          </p>
+        </div>
+
+        <div class="p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-phone text-gray-400 text-sm"></i>
+                Teléfono
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.telefono"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid': isEditing && !configuracion.telefono.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Teléfono principal</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.telefono.trim()"
+              >
+                El teléfono es requerido
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-envelope text-gray-400 text-sm"></i>
+                Correo institucional
+              </label>
+              <input
+                pInputText
+                type="email"
+                [(ngModel)]="configuracion.correo_institucional"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid':
+                    isEditing && !configuracion.correo_institucional.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">
+                Correo electrónico oficial
+              </p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.correo_institucional.trim()"
+              >
+                El correo institucional es requerido
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-user text-gray-400 text-sm"></i>
+                Nombre del director
+              </label>
+              <input
+                pInputText
+                [(ngModel)]="configuracion.nombre_director"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'bg-gray-50': !isEditing,
+                  'p-invalid':
+                    isEditing && !configuracion.nombre_director.trim()
+                }"
+              />
+              <p class="text-xs text-gray-500 mt-1">Director(a) actual</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.nombre_director.trim()"
+              >
+                El nombre del director es requerido
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label
+                class="form-label font-medium text-gray-700 flex items-center gap-2"
+              >
+                <i class="pi pi-venus-mars text-gray-400 text-sm"></i>
+                Género
+              </label>
+              <p-select
+                [options]="[
+                  { label: 'Masculino', value: 'M' },
+                  { label: 'Femenino', value: 'F' }
+                ]"
+                [(ngModel)]="configuracion.genero_director"
+                [disabled]="!isEditing"
+                class="w-full"
+                [ngClass]="{
+                  'opacity-75': !isEditing,
+                  'p-invalid':
+                    isEditing && !configuracion.genero_director.trim()
+                }"
+              ></p-select>
+              <p class="text-xs text-gray-500 mt-1">Género del director(a)</p>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="isEditing && !configuracion.genero_director.trim()"
+              >
+                El género es requerido
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

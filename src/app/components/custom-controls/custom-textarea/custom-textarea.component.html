@@ -1,0 +1,33 @@
+<div [formGroup]="form" [id]="control.name" class="form-group">
+  <label [for]="control.name"
+    class="block text-sm font-medium">{{fieldLabel}}</label>
+  <div *ngIf="!viewMode; else view" class="mt-1">
+    <textarea 
+      [required]="required"
+      pTextarea 
+      [readOnly]="readonly"
+      [id]="control.name"
+      [formControlName]="control.name" 
+      class="w-full"
+      [fluid]="true"
+      style="width: 100% !important;"
+      [ngClass]="control.classList!"
+      [minlength]="control.minlength!" 
+      [maxlength]="control.maxlength!" 
+      [placeholder]="control.placeholder || ''" 
+      [pattern]="control.pattern!"
+      [autocomplete]="'off'"
+    ></textarea>
+    <ng-container *ngIf="validadoresService.campoInvalido(form.controls[control.name]!)">
+      <div class="error-container">
+        <small class="small error"
+          *ngFor="let error of validadoresService.obtenerErrores(form.controls[control.name]!)">
+          <span>{{error!.message}}</span>
+        </small>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #view>
+    {{form.get(control.name)?.value}}
+  </ng-template>
+</div>

@@ -1,0 +1,266 @@
+<div class="min-h-screen p-4 sm:p-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+      >
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-2xl font-bold text-gray-800">Panel del Docente</h1>
+          </div>
+
+          <p class="text-gray-600 text-sm sm:text-base">
+            Gestión de asistencia y calificaciones de los grupos con esta
+            materia
+          </p>
+        </div>
+
+        <div class="w-full md:w-1/3 flex flex-col gap-3">
+          <label for="materiaSelect" class="text-sm font-medium text-gray-700">
+            Grupo seleccionado:
+          </label>
+          <p-select
+            [options]="grupos || []"
+            optionLabel="nombre_grupo"
+            optionValue="id"
+            [(ngModel)]="grupoSeleccionado"
+            (onChange)="onGrupoChange()"
+          ></p-select>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col sm:flex-row gap-3 mb-6 w-full sm:items-center sm:justify-start"
+    >
+      <button
+        (click)="vista = 'asistencia'"
+        [ngClass]="{
+          'bg-brand-600 text-white': vista === 'asistencia',
+          'bg-brand-100 text-brand-700 hover:bg-brand-200':
+            vista !== 'asistencia',
+        }"
+        class="w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+      >
+        <i class="pi pi-calendar-clock mr-2"></i> Tomar Asistencia
+      </button>
+
+      <button
+        (click)="vista = 'calificaciones'"
+        [ngClass]="{
+          'bg-brand-600 text-white': vista === 'calificaciones',
+          'bg-brand-100 text-brand-700 hover:bg-brand-200':
+            vista !== 'calificaciones',
+        }"
+        class="w-full sm:w-auto px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+      >
+        <i class="pi pi-star mr-2"></i> Calificar Alumnos
+      </button>
+    </div>
+
+    <div
+      class="bg-white border border-brand-100 rounded-xl sm:rounded-2xl shadow-md overflow-hidden"
+    >
+      <div *ngIf="vista === 'asistencia'" class="p-6">
+        <h2 class="text-xl font-semibold text-brand-900 mb-4">
+          Tomar asistencia
+        </h2>
+
+        <div
+          class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6"
+        >
+          <div class="w-full md:w-1/4">
+            <label class="text-sm m-2 font-medium text-gray-700"
+              >Horario:</label
+            >
+            <p-select
+              [options]="horarios || []"
+              optionLabel="label"
+              optionValue="id"
+              [(ngModel)]="horarioSeleccionado"
+              (onChange)="onHorarioChange()"
+              [style]="{ width: '100%' }"
+            ></p-select>
+          </div>
+          <div class="w-full md:w-1/4">
+            <label class="text-sm m-2 font-medium text-gray-700">Fecha:</label>
+            <p-datePicker
+              *ngIf="horarioSeleccionado"
+              [(ngModel)]="fechaSeleccionada"
+              (onSelect)="onHorarioChange()"
+              [disabledDays]="disabledDays"
+              appendTo="body"
+              [style]="{ width: '100%' }"
+            >
+            </p-datePicker>
+          </div>
+          <div class="w-full md:w-1/4">
+            <button
+              (click)="onRegistrarAsistencia()"
+              pButton
+              icon="pi pi-save"
+              label="Guardar asistencia"
+              class="bg-brand-600 w-full md:w-auto text-white rounded-lg shadow-sm hover:bg-brand-700 transition-all duration-200"
+              [disabled]="!canRegistrarAsistencias"
+            ></button>
+          </div>
+        </div>
+
+        <div *ngIf="inscripciones.length > 0; else noInscripciones">
+          <div class="overflow-x-auto">
+            <table
+              class="min-w-full text-sm text-left border border-brand-100 rounded-lg"
+            >
+              <thead class="bg-brand-50 text-brand-700 uppercase font-medium">
+                <tr>
+                  <th class="px-4 py-3">Alumno</th>
+                  <th class="px-4 py-3 text-center">Número de control</th>
+                  <th class="px-4 py-3 text-center">Hora</th>
+                  <th class="px-4 py-3 text-center">Tipo Asistencia</th>
+                  <th class="px-4 py-3 text-center">Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let asistencia of asistenciasObjects; let i = index"
+                  class="border-b border-brand-100 hover:bg-brand-50 transition-colors"
+                >
+                  <td class="px-4 py-3 font-medium text-brand-900">
+                    {{ asistencia.alumno.nombres }}
+                    {{ asistencia.alumno.paterno }}
+                    {{ asistencia.alumno.materno }}
+                  </td>
+                  <td class="px-4 py-3 text-center text-brand-700">
+                    {{ asistencia.alumno.numero_control }}
+                  </td>
+                  <td class="px-4 py-3 text-center text-brand-700">
+                    <p-datepicker
+                      [(ngModel)]="asistencia.hora"
+                      appendTo="body"
+                      [iconDisplay]="'input'"
+                      [showIcon]="true"
+                      [timeOnly]="true"
+                      [inputStyle]="{ width: '100%', minWidth: '6rem' }"
+                    >
+                    </p-datepicker>
+                  </td>
+                  <td class="px-4 py-3 text-center">
+                    <p-select
+                      [options]="tipoAsistencia"
+                      appendTo="body"
+                      [(ngModel)]="asistencia.tipo"
+                    />
+                  </td>
+                  <td class="flex justify-center items-center p-4">
+                    <textarea
+                      type="text"
+                      pTextarea
+                      [(ngModel)]="asistencia.observaciones"
+                      placeholder="Escribe observaciones"
+                      class="border border-brand-300 rounded px-2 py-1 w-full text-sm focus:ring-2 focus:ring-brand-500 focus:outline-none"
+                    ></textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <ng-template #noInscripciones>
+          <div class="p-6 text-center text-brand-600">
+            No hay alumnos disponibles para esta materia.
+          </div>
+        </ng-template>
+      </div>
+
+      <div *ngIf="vista === 'calificaciones'" class="p-6">
+        <h2 class="text-xl font-semibold text-brand-900 mb-4">
+          Calificar Alumnos
+        </h2>
+        <div
+          class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6"
+        >
+          <div class="w-full md:w-1/2">
+            <label class="text-sm m-2 font-medium text-gray-700">Filtro:</label>
+            <input
+              type="text"
+              pInputText
+              placeholder="Buscar alumno por nombre o apellido..."
+              [(ngModel)]="searchTerm"
+              [style]="{ width: '100%' }"
+            />
+          </div>
+        </div>
+
+        <div
+          *ngIf="filteredHistoriales().length > 0; else noAlumnosCalificaciones"
+          class="overflow-x-auto"
+        >
+          <div class="grid grid-cols-1 divide-y divide-brand-100">
+            <div
+              *ngFor="let historial of filteredHistoriales()"
+              class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 pb-4 hover:bg-brand-50 transition-colors duration-200 border-b border-brand-100 shadow-sm rounded-lg mb-2"
+            >
+              <div class="flex-1 min-w-0">
+                <div class="font-semibold text-brand-900 text-sm sm:text-base">
+                  {{ historial.alumno.nombres }} {{ historial.alumno.paterno }}
+                  {{ historial.alumno.materno }}
+                </div>
+                <div class="text-xs text-brand-600 mt-1">
+                  No. Control: {{ historial.alumno.numero_control }}
+                </div>
+
+                <div
+                  class="mt-2 text-xs font-medium inline-flex items-center px-2 py-1 rounded-full"
+                  [ngClass]="{
+                    'bg-green-100 text-green-700':
+                      historial.estatus_historial === 1,
+                    'bg-red-100 text-red-700':
+                      historial.estatus_historial === 2,
+                    'bg-yellow-100 text-yellow-700':
+                      historial.estatus_historial === 3,
+                  }"
+                >
+                  {{ historial.estatus_historial_display }}
+                </div>
+              </div>
+
+              <div
+                class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto"
+              >
+                <p-inputNumber
+                  [(ngModel)]="historial.calificacion"
+                  [min]="0"
+                  [max]="10"
+                  [mode]="'decimal'"
+                  [minFractionDigits]="1"
+                  [maxFractionDigits]="1"
+                  [useGrouping]="false"
+                  [showButtons]="true"
+                  class="w-full"
+                  placeholder="Sin calificación"
+                ></p-inputNumber>
+
+                <button
+                  (click)="onCalificacionSave(historial)"
+                  pButton
+                  icon="pi pi-save"
+                  severity="info"
+                  class="w-full"
+                  label="Guardar"
+                  [disabled]="!historial.calificacion"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noAlumnosCalificaciones>
+          <div class="p-6 text-center text-brand-600">
+            No hay historiales para esta materia.
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

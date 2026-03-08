@@ -1,0 +1,41 @@
+<p-dialog [(visible)]="visible" [modal]="true" [closable]="true" (onHide)="visibleChange.emit(false)">
+  <ng-template pTemplate="header">
+    <h2 class="text-lg font-semibold">Registrar Asignación Docente</h2>
+  </ng-template>
+
+  <form [formGroup]="asignacionForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    <!-- Docente -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Docente *</label>
+      <app-docente-autocomplete formControlName="docente"></app-docente-autocomplete>
+      <p *ngIf="asignacionForm.get('docente')?.invalid && asignacionForm.get('docente')?.touched"
+        class="text-red-500 text-xs mt-1">
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <!-- Materia -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Materia *</label>
+      <app-materia-autocomplete formControlName="materia"></app-materia-autocomplete>
+      <p *ngIf="asignacionForm.get('materia')?.invalid && asignacionForm.get('materia')?.touched"
+        class="text-red-500 text-xs mt-1">
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Ciclo Escolar *</label>
+      <app-ciclo-escolar-autocomplete formControlName="ciclo_escolar"></app-ciclo-escolar-autocomplete>
+      <p *ngIf="asignacionForm.get('ciclo_escolar')?.invalid && asignacionForm.get('ciclo_escolar')?.touched"
+        class="text-red-500 text-xs mt-1">
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-4">
+      <button pButton type="button" label="Cancelar" (click)="visibleChange.emit(false)"></button>
+      <button pButton type="submit" [disabled]="asignacionForm.invalid" severity="success" label="Guardar"></button>
+    </div>
+  </form>
+</p-dialog>

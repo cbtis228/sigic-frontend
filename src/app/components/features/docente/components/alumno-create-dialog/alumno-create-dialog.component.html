@@ -1,0 +1,73 @@
+<p-dialog
+  header="Crear Alumno"
+  [(visible)]="showDialog"
+  [modal]="true"
+  (onHide)="close()"
+  [closable]="true"
+  [style]="{ width: '650px' }"
+>
+  <form
+    [formGroup]="form"
+    class="grid grid-cols-1 md:grid-cols-2 gap-4 p-fluid"
+  >
+    <div class="field col">
+      <label for="numero_control">Número de Control</label>
+      <input pInputText id="numero_control" formControlName="numero_control" />
+    </div>
+
+    <div class="field col">
+      <label for="nombres">Nombres</label>
+      <input pInputText id="nombres" formControlName="nombres" />
+    </div>
+
+    <div class="field col">
+      <label for="paterno">Apellido Paterno</label>
+      <input pInputText id="paterno" formControlName="paterno" />
+    </div>
+
+    <div class="field col">
+      <label for="materno">Apellido Materno</label>
+      <input pInputText id="materno" formControlName="materno" />
+    </div>
+
+    <div class="field col">
+      <label for="correo">Correo</label>
+      <input pInputText id="correo" formControlName="correo" type="email" />
+    </div>
+
+    <div class="field col">
+      <label for="telefono">Teléfono</label>
+      <input pInputText id="telefono" formControlName="telefono" />
+    </div>
+
+    <div class="field col">
+      <label for="domicilio">Domicilio</label>
+      <input pInputText id="domicilio" formControlName="domicilio" />
+    </div>
+
+    <div class="field col">
+      <label for="fecha_ingreso">Fecha de Ingreso</label>
+      <p-calendar
+        id="fecha_ingreso"
+        formControlName="fecha_ingreso"
+        dateFormat="yy-mm-dd"
+        appendTo="body"
+      ></p-calendar>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Cancelar"
+      class="p-button-text"
+      (click)="close()"
+    ></button>
+    <button
+      pButton
+      label="Guardar"
+      (click)="onSave()"
+      [disabled]="form.invalid"
+    ></button>
+  </ng-template>
+</p-dialog>

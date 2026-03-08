@@ -1,0 +1,20 @@
+<div class="w-full">
+  <p-autocomplete
+    id="ciclo-escolar-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    [showClear]="showClear"
+    appendTo="body"
+    (completeMethod)="filterCicloEscolares($event)"
+    (onSelect)="onCicloEscolarSelect($event)"
+    (onClear)="onCicloEscolarClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="ciclosEscolares"
+    [(ngModel)]="selectedCicloEscolar"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    optionLabel="nombre_ciclo"
+    class="w-full shadow-sm rounded-lg"
+  >
+  </p-autocomplete>
+</div>

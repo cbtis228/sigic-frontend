@@ -1,0 +1,8 @@
+<div class="p-4">
+  <app-docente-edit-general-card
+    [showStatus]="true"
+    [showSkeletons]="!docente"
+    [docente]="docente"
+    (updatedDocente)="onSubmit($event)"
+  ></app-docente-edit-general-card>
+</div>

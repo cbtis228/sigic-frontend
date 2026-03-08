@@ -1,0 +1,323 @@
+<div class="p-2 md:p-6 min-h-screen">
+  <form
+    [formGroup]="docenteForm"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!showSkeletons; else loadingTemplate"
+    class="max-w-5xl mx-auto"
+  >
+    <app-card-with-title [title]="'Información General'">
+      <div class="p-5 bg-blue-50/30">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-4">
+            <div class="field">
+              <label
+                for="nombres"
+                class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-blue-100 text-blue-800 rounded-full p-1 mr-2">
+                  <i class="pi pi-user text-xs"></i>
+                </span>
+                Nombres <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                formControlName="nombres"
+                id="nombres"
+                class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="Ingrese sus nombres completos"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  docenteForm.get('nombres')?.invalid &&
+                  docenteForm.get('nombres')?.touched
+                "
+              >
+                El nombre del docente es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="paterno"
+                class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-blue-100 text-blue-800 rounded-full p-1 mr-2">
+                  <i class="pi pi-id-card text-xs"></i>
+                </span>
+                Apellido Paterno <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                formControlName="paterno"
+                id="paterno"
+                class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="Apellido paterno"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  docenteForm.get('paterno')?.invalid &&
+                  docenteForm.get('paterno')?.touched
+                "
+              >
+                El apellido paterno del docente es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="materno"
+                class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-blue-100 text-blue-800 rounded-full p-1 mr-2">
+                  <i class="pi pi-id-card text-xs"></i>
+                </span>
+                Apellido Materno <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                formControlName="materno"
+                id="materno"
+                class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="Apellido materno"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  docenteForm.get('materno')?.invalid &&
+                  docenteForm.get('materno')?.touched
+                "
+              >
+                El apellido materno del docente es requerido
+              </small>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="field">
+              <label
+                for="telefono"
+                class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-green-100 text-green-800 rounded-full p-1 mr-2">
+                  <i class="pi pi-phone text-xs"></i>
+                </span>
+                Teléfono
+              </label>
+              <input
+                pInputText
+                type="tel"
+                formControlName="telefono"
+                id="telefono"
+                class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="(000) 000-0000"
+              />
+            </div>
+
+            <div class="field">
+              <label
+                for="celular"
+                class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-green-100 text-green-800 rounded-full p-1 mr-2">
+                  <i class="pi pi-mobile text-xs"></i>
+                </span>
+                Celular
+              </label>
+              <input
+                pInputText
+                type="tel"
+                formControlName="celular"
+                id="celular"
+                class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="(000) 000-0000"
+              />
+            </div>
+
+            <div class="field">
+              <label
+                for="rfc"
+                class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-blue-100 text-blue-800 rounded-full p-1 mr-2">
+                  <i class="pi pi-building text-xs"></i>
+                </span>
+                RFC <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                formControlName="rfc"
+                id="rfc"
+                class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 uppercase"
+                placeholder="Ej: ABCD010101AAA"
+                style="text-transform: uppercase"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  docenteForm.get('rfc')?.invalid &&
+                  docenteForm.get('rfc')?.touched
+                "
+              >
+                El rfc del docente es requerido y debe de ser de 13 caracteres
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="field mt-5">
+          <label
+            for="cedula_profesional"
+            class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+          >
+            <span class="bg-purple-100 text-purple-800 rounded-full p-1 mr-2">
+              <i class="pi pi-briefcase text-xs"></i>
+            </span>
+            Cédula Profesional
+          </label>
+          <input
+            pInputText
+            type="text"
+            formControlName="cedula_profesional"
+            id="cedula_profesional"
+            class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            placeholder="Número de cédula profesional"
+          />
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="
+              docenteForm.get('cedula_profesional')?.invalid &&
+              docenteForm.get('cedula_profesional')?.touched
+            "
+          >
+            La cedula debe de tener 20 caracteres
+          </small>
+        </div>
+
+        <div class="field mt-5">
+          <label
+            for="domicilio"
+            class="block text-sm font-semibold text-gray-700 mb-2 flex items-center"
+          >
+            <span class="bg-orange-100 text-orange-800 rounded-full p-1 mr-2">
+              <i class="pi pi-home text-xs"></i>
+            </span>
+            Domicilio
+          </label>
+          <textarea
+            pInputTextarea
+            formControlName="domicilio"
+            id="domicilio"
+            rows="3"
+            class="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+            placeholder="Ingrese su dirección completa"
+          ></textarea>
+        </div>
+        <div class="field col-span-1" *ngIf="showStatus">
+          <label
+            for="estatus"
+            class="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Estatus
+          </label>
+          <p-select
+            inputId="estatus"
+            formControlName="estatus"
+            [options]="estadosDocente"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecciona un estatus"
+            class="w-full"
+            appendTo="body"
+            [class]="{
+              'p-invalid':
+                docenteForm.get('estatus')?.invalid &&
+                docenteForm.get('estatus')?.touched,
+            }"
+          >
+          </p-select>
+
+          <!-- Mensaje de error -->
+          <small
+            class="p-error"
+            *ngIf="
+              docenteForm.get('estatus')?.invalid &&
+              docenteForm.get('estatus')?.touched
+            "
+          >
+            El estatus es requerido
+          </small>
+        </div>
+      </div>
+    </app-card-with-title>
+
+    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 px-2">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined p-button-secondary shadow-md hover:shadow-lg transition-all duration-300 py-3 px-5 rounded-xl"
+        icon="pi pi-arrow-left"
+        label="Regresar"
+        [routerLink]="'/docente/data/general'"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        class="shadow-md hover:shadow-lg transition-all duration-300 py-3 px-5 rounded-xl"
+        icon="pi pi-check"
+        iconPos="right"
+        label="Guardar Cambios"
+        [disabled]="docenteForm.invalid"
+        [class]="{
+          'p-button-success': !docenteForm.invalid,
+          'p-button-disabled': docenteForm.invalid,
+          'opacity-100': !docenteForm.invalid,
+          'opacity-70': docenteForm.invalid,
+        }"
+      ></button>
+    </div>
+  </form>
+
+  <ng-template #loadingTemplate>
+    <div class="max-w-5xl mx-auto">
+      <app-card-with-title [title]="'Información General'">
+        <div class="p-5 bg-blue-50/30">
+          <div class="animate-pulse">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="space-y-5">
+                <div *ngFor="let item of [1, 2, 3]" class="space-y-3">
+                  <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div class="h-12 bg-gray-300 rounded-xl"></div>
+                </div>
+              </div>
+
+              <div class="space-y-5">
+                <div *ngFor="let item of [1, 2, 3]" class="space-y-3">
+                  <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div class="h-12 bg-gray-300 rounded-xl"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 space-y-5">
+              <div *ngFor="let item of [1, 2]" class="space-y-3">
+                <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                <div class="h-12 bg-gray-300 rounded-xl"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="flex justify-end gap-4 mt-8 px-2">
+        <div class="h-12 bg-gray-300 rounded-xl w-32 animate-pulse"></div>
+        <div class="h-12 bg-gray-300 rounded-xl w-40 animate-pulse"></div>
+      </div>
+    </div>
+  </ng-template>
+</div>

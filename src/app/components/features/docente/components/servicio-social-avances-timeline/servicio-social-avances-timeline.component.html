@@ -1,0 +1,70 @@
+<div class="space-y-6">
+  <ng-container
+    *ngIf="
+      registrosServicioSocial && registrosServicioSocial.length > 0;
+      else emptyState
+    "
+  >
+    <ng-container *ngFor="let registro of registrosServicioSocial">
+      <div class="flex gap-4">
+        <div class="flex flex-col items-center">
+          <div
+            class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center"
+          >
+            <i class="pi pi-clock text-white text-sm"></i>
+          </div>
+          <div class="w-0.5 h-full bg-gray-200 mt-2"></div>
+        </div>
+        <div class="flex-1 pb-6">
+          <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="font-semibold text-gray-800 text-lg">
+                  +{{ registro.horas }} horas registradas
+                </h4>
+                <p class="text-sm text-gray-600 mt-1">
+                  {{ registro.fecha_registro | date : "EEEE, d MMMM" }}
+                </p>
+                <p class="text-gray-700 mt-2">
+                  {{ registro.descripcion }}
+                </p>
+              </div>
+              <div>
+                <p-button
+                  *ngIf="showDeleteButton"
+                  (onClick)="onClickDelete.emit(registro)"
+                  severity="danger"
+                  icon="pi pi-trash"
+                  [rounded]="true"
+                  [outlined]="true"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="text-center py-12">
+      <div class="mb-4 text-gray-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-16 w-16 mx-auto"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      </div>
+      <p class="text-gray-500 text-lg">No se cuenta con registros aún</p>
+    </div>
+  </ng-template>
+</div>

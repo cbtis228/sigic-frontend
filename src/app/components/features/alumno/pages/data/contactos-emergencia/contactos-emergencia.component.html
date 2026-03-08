@@ -1,0 +1,31 @@
+<div class="flex flex-col gap-6 p-6">
+  <!-- Header con título y botón -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold text-gray-800">Contactos de Emergencia</h2>
+    <p-button
+      label="Editar"
+      severity="info"
+      icon="pi pi-pencil"
+      routerLink="edit"
+    />
+  </div>
+
+  <!-- Grid de cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <app-contacto-emergencia-card
+      [loading]="!contactosEmergencia"
+      [numero_contacto]="1"
+      [contactoEmergencia]="contactosEmergencia?.[0] || null"
+    ></app-contacto-emergencia-card>
+    <app-contacto-emergencia-card
+      [loading]="!contactosEmergencia"
+      [numero_contacto]="2"
+      [contactoEmergencia]="contactosEmergencia?.[1] || null"
+    ></app-contacto-emergencia-card>
+    <app-contacto-emergencia-card
+      [loading]="!contactosEmergencia"
+      [numero_contacto]="3"
+      [contactoEmergencia]="contactosEmergencia?.[2] || null"
+    ></app-contacto-emergencia-card>
+  </div>
+</div>

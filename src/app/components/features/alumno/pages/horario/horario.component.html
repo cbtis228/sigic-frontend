@@ -1,0 +1,164 @@
+<div class="p-6 min-h-screen">
+  <!-- Tabs -->
+  <div class="flex md:w-1/4 space-x-1 bg-white rounded-t-xl p-1 shadow-sm border border-gray-200">
+    <button class="flex-1 px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ease-in-out transform"
+      [ngClass]="
+        activeTab === 'horario'
+          ? 'bg-gradient-to-r from-brand-400 to-brand-500 text-white'
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+      " (click)="activeTab = 'horario'">
+      <div class="flex items-center justify-center space-x-2">
+        <i class="pi pi-calendar"></i>
+        <span>Horario</span>
+      </div>
+    </button>
+    <button class="flex-1 px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-200 ease-in-out transform"
+      [ngClass]="
+        activeTab === 'materias'
+          ? 'bg-gradient-to-r from-brand-400 to-brand-500 text-white'
+          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+      " (click)="activeTab = 'materias'">
+      <div class="flex items-center justify-center space-x-2">
+        <i class="pi pi-book"></i>
+        <span>Materias</span>
+      </div>
+    </button>
+  </div>
+
+  <!-- Panel -->
+  <div class="bg-white rounded-b-xl shadow-lg border border-gray-200 border-t-0 overflow-hidden">
+    <div class="p-6">
+      <!-- Horario -->
+      <ng-container *ngIf="activeTab === 'horario'">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold text-gray-800">Mi Horario Semanal</h2>
+          <span class="px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm font-medium">
+            {{ horarios?.length || 0 }} clases
+          </span>
+        </div>
+
+        <ng-container *ngIf="horarios; else horarioSkeleton">
+          <app-horario-semanal-card [showHeader]="false" [horarios]="horarios"
+            [showActions]="false"></app-horario-semanal-card>
+        </ng-container>
+
+        <ng-template #horarioSkeleton>
+          <div class="space-y-4 animate-pulse">
+            <div class="flex space-x-4 mb-6">
+              <div class="h-8 bg-gradient-to-r from-brand-200 to-brand-300 rounded-lg w-32"></div>
+              <div class="h-8 bg-gradient-to-r from-brand-200 to-brand-300 rounded-lg w-24"></div>
+              <div class="h-8 bg-gradient-to-r from-brand-200 to-brand-300 rounded-lg w-28"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+              <div *ngFor="let i of [1, 2, 3, 4, 5]" class="space-y-3">
+                <div class="h-6 bg-brand-200 rounded-lg w-full"></div>
+                <div class="h-20 bg-brand-100 rounded-lg"></div>
+                <div class="h-16 bg-brand-100 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+
+      <!-- Materias -->
+      <ng-container *ngIf="activeTab === 'materias'">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-gray-800">Materias Inscritas</h2>
+          <span class="px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-sm font-medium">
+            {{ historial?.length || 0 }} materias
+          </span>
+        </div>
+
+        <ng-container *ngIf="historial; else materiasSkeleton">
+          <ng-container *ngIf="historial.length > 0; else noMaterias">
+            <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div *ngFor="let h of historial"
+                class="bg-brand-50 border border-brand-100 rounded-lg p-4 sm:p-5 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow duration-200">
+                <!-- Header materia -->
+                <div class="flex items-start justify-between">
+                  <span class="px-2 py-1 bg-brand-100 text-brand-700 text-xs font-bold rounded">
+                    {{ h.materia.clave }}
+                  </span>
+                  <div class="w-2.5 h-2.5 rounded-full" [ngClass]="{
+                      'bg-green-500': h.estatus_historial === 1,
+                      'bg-yellow-500': h.estatus_historial === 2,
+                      'bg-red-500': h.estatus_historial === 3,
+                    }"></div>
+                </div>
+
+                <!-- Nombre -->
+                <h3
+                  class="font-semibold text-brand-900 text-sm sm:text-base leading-tight line-clamp-2 hover:text-brand-600 transition-colors">
+                  {{ h.materia.nombre }}
+                </h3>
+
+                <!-- Detalles -->
+                <div class="space-y-2 text-sm">
+                  <ng-container *ngIf="h.estatus_historial == 3; else calificacion">
+                    <div class="flex items-center space-x-2 text-amber-600">
+                      <i class="pi pi-clock"></i>
+                      <span class="font-medium">Pendiente de calificación</span>
+                    </div>
+                  </ng-container>
+
+                  <ng-template #calificacion>
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-600 font-medium">Calificación:</span>
+                      <span class="text-sm font-bold text-gray-800 bg-gray-100 px-2 py-1 rounded">
+                        {{ h.calificacion || "N/A" }}
+                      </span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-600 font-medium">Estado:</span>
+                      <span class="text-xs font-semibold px-2 py-1 rounded" [ngClass]="{
+                          'bg-green-100 text-green-800':
+                            h.estatus_historial === 1,
+                          'bg-yellow-100 text-yellow-800':
+                            h.estatus_historial === 2,
+                          'bg-red-100 text-red-800': h.estatus_historial === 3,
+                        }">
+                        {{ h.estatus_historial_display }}
+                      </span>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Mensaje cuando no hay materias -->
+          <ng-template #noMaterias>
+            <div class="text-center py-12">
+              <div class="max-w-md mx-auto">
+                <div class="w-24 h-24 mx-auto mb-4 text-gray-300">
+                  <i class="pi pi-book text-6xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">
+                  No tienes materias inscritas
+                </h3>
+                <p class="text-gray-500 mb-6">
+                  Actualmente no estás inscrito en ninguna materia.
+                </p>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+
+        <!-- Skeleton de materias -->
+        <ng-template #materiasSkeleton>
+          <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 animate-pulse">
+            <div *ngFor="let i of [1, 2, 3, 4]" class="bg-brand-50 border border-brand-100 rounded-lg p-4 sm:p-5">
+              <div class="w-12 h-4 bg-brand-200 rounded-lg mb-4"></div>
+              <div class="h-5 bg-brand-200 rounded-lg mb-3 w-3/4"></div>
+              <div class="h-3 bg-brand-100 rounded-lg mb-4 w-1/2"></div>
+              <div class="space-y-2 mt-4">
+                <div class="h-4 bg-brand-200 rounded-lg"></div>
+                <div class="h-4 bg-brand-200 rounded-lg w-2/3"></div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</div>

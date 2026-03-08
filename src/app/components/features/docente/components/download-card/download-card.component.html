@@ -1,0 +1,49 @@
+<div
+  class="bg-white w-full h-full rounded-xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-xl transition-shadow duration-300"
+>
+  <div class="p-6 flex flex-col h-full">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-blue-50 p-3 rounded-lg">
+          <i class="pi pi-users text-blue-600 text-xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800">
+          {{title}}
+        </h3>
+      </div>
+      <div class="flex gap-1">
+        <span
+          *ngIf="showCsvButton"
+          class="bg-green-100 text-green-800 text-xs font-medium px-2 py-1 rounded"
+        >
+          CSV
+        </span>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <p class="text-gray-600 text-sm">
+        {{description}}
+      </p>
+    </div>
+
+    <div class="space-y-2 mb-6 flex-grow">
+      <div class="flex items-center text-sm text-gray-500" *ngFor="let point of bulletPoints">
+        <i class="pi pi-check-circle text-green-500 mr-2 text-sm"></i>
+        <span>{{point}}</span>
+      </div>
+    </div>
+
+    <div class="mt-auto">
+      <p-button
+        *ngIf="showCsvButton"
+        label="Descargar CSV"
+        icon="pi pi-file-excel"
+        iconPos="right"
+        (onClick)="onClickDownloadCsv.emit()"
+        severity="success"
+        class="w-full"
+      />
+    </div>
+  </div>
+</div>

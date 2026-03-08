@@ -1,0 +1,16 @@
+<div class="h-dvh">
+  <app-topnav-layout></app-topnav-layout>
+  <app-menu-layout #menu></app-menu-layout>
+  <div
+    class="top-16 absolute w-full bg-brand-50 h-[calc(100%-4rem)] max-h-[calc(100%-4rem)] right-0 body overflow-auto"
+    [@shrinkGrow]="getAnimationState()"
+    [class.desktop-only]="menuService.isDesktop()"
+    [ngClass]="
+      menu.isDesktopMenuExpanded()
+        ? 'lg:w-[calc(100%-14rem)]'
+        : 'lg:w-[calc(100%-4rem)]'
+    "
+  >
+    <router-outlet></router-outlet>
+  </div>
+</div>

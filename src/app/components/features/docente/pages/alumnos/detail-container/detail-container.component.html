@@ -1,0 +1,151 @@
+<div class="min-h-screen p-4 max-w-7xl mx-auto">
+  <div class="flex flex-col gap-6">
+    <!-- Skeleton loading mejorado - igual al de docente -->
+    <div
+      *ngIf="!alumno"
+      class="bg-white rounded-2xl shadow-lg p-6 border border-brand-100 animate-pulse"
+    >
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+      >
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="p-3 bg-brand-100 rounded-xl">
+              <div class="w-6 h-6 bg-brand-200 rounded-full"></div>
+            </div>
+            <div class="h-8 bg-brand-200 rounded-lg w-64"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div class="space-y-2">
+              <div class="h-4 bg-brand-100 rounded w-20"></div>
+              <div class="h-6 bg-brand-200 rounded w-32"></div>
+            </div>
+            <div class="space-y-2">
+              <div class="h-4 bg-brand-100 rounded w-16"></div>
+              <div class="h-6 bg-brand-200 rounded w-48"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header de información del alumno mejorado -->
+    <div
+      *ngIf="alumno"
+      class="bg-white rounded-2xl shadow-lg border border-brand-100 overflow-hidden"
+    >
+      <!-- Barra decorativa superior - con color azul para diferenciar sutilmente -->
+      <div class="h-2 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+
+      <div class="p-6">
+        <div
+          class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6"
+        >
+          <!-- Información del alumno con avatar mejorado -->
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="p-3 bg-blue-100 rounded-xl">
+                  <i class="pi pi-user text-2xl text-blue-600"></i>
+                </div>
+                <div>
+                  <h2 class="text-2xl font-bold text-brand-950">
+                    {{ alumno.nombres }} {{ alumno.paterno }}
+                    {{ alumno.materno }}
+                  </h2>
+                  <p
+                    class="text-brand-600 text-sm mt-1 flex items-center gap-2"
+                  >
+                    <i class="pi pi-id-card text-brand-400"></i>
+                    Información académica del alumno
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex gap-2 self-start lg:self-center w-full lg:w-auto"
+              >
+                <p-button
+                  icon="pi pi-arrow-left"
+                  severity="info"
+                  label="Regresar a alumnos"
+                  styleClass="w-full lg:w-auto bg-brand-50 border-brand-200 text-brand-700 hover:bg-brand-100 hover:border-brand-300"
+                  [text]="false"
+                  routerLink=".."
+                >
+                  <ng-template pTemplate="icon">
+                    <i class="pi pi-arrow-left mr-2"></i>
+                  </ng-template>
+                </p-button>
+              </div>
+            </div>
+
+            <!-- Tarjetas de información en grid responsive -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <!-- Matrícula -->
+              <div
+                class="bg-blue-50 rounded-xl p-4 border border-blue-100 hover:border-blue-300 transition-all duration-300"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="p-2 bg-blue-200 rounded-lg">
+                    <i class="pi pi-hashtag text-blue-700 text-sm"></i>
+                  </div>
+                  <p
+                    class="text-xs font-medium text-blue-700 uppercase tracking-wider"
+                  >
+                    Matrícula
+                  </p>
+                </div>
+                <p class="text-lg font-bold text-brand-900 font-mono">
+                  {{ alumno.numero_control }}
+                </p>
+                <p class="text-xs text-blue-500 mt-1">
+                  Número de control institucional
+                </p>
+              </div>
+
+              <!-- Correo Electrónico -->
+              <div
+                class="bg-blue-50 rounded-xl p-4 border border-blue-100 hover:border-blue-300 transition-all duration-300 sm:col-span-1"
+              >
+                <div class="flex items-center gap-3 mb-2">
+                  <div class="p-2 bg-blue-200 rounded-lg">
+                    <i class="pi pi-envelope text-blue-700 text-sm"></i>
+                  </div>
+                  <p
+                    class="text-xs font-medium text-blue-700 uppercase tracking-wider"
+                  >
+                    Correo Electrónico
+                  </p>
+                </div>
+                <p
+                  class="text-lg font-bold text-brand-900 truncate"
+                  title="{{ alumno.correo }}"
+                >
+                  {{ alumno.correo }}
+                </p>
+                <p class="text-xs text-blue-500 mt-1">Correo institucional</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badge de estado activo -->
+        <div
+          class="mt-6 pt-4 border-t border-brand-100 flex items-center gap-2"
+        >
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-sm"
+          >
+            <span
+              class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"
+            ></span>
+            Alumno activo
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

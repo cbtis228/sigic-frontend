@@ -1,0 +1,267 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  styleClass="w-full p-2 md:w-2/3"
+  [closable]="true"
+  (onHide)="visibleChange.emit(false)"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-lg font-semibold">Edicion De Capacitacion</h2>
+  </ng-template>
+
+  <form
+    [formGroup]="capacitacionForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="md:col-span-2">
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              capacitacionForm.get('nombre')?.invalid &&
+              capacitacionForm.get('nombre')?.touched,
+          }"
+        >
+          Nombre *
+        </label>
+        <input pInputText class="w-full" formControlName="nombre" />
+        <p
+          *ngIf="
+            capacitacionForm.get('nombre')?.invalid &&
+            capacitacionForm.get('nombre')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Este campo es obligatorio
+        </p>
+      </div>
+
+      <div class="md:col-span-1">
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              capacitacionForm.get('tipo')?.invalid &&
+              capacitacionForm.get('tipo')?.touched,
+          }"
+        >
+          Tipo *
+        </label>
+        <p-select
+          [options]="tiposCapacitacion"
+          formControlName="tipo"
+          appendTo="body"
+          class="w-full"
+          [ngClass]="{
+            'border border-red-500 rounded-md':
+              capacitacionForm.get('tipo')?.invalid &&
+              capacitacionForm.get('tipo')?.touched,
+          }"
+        ></p-select>
+        <p
+          *ngIf="
+            capacitacionForm.get('tipo')?.invalid &&
+            capacitacionForm.get('tipo')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Seleccione un tipo
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="col-span-1">
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              capacitacionForm.get('duracion')?.invalid &&
+              capacitacionForm.get('duracion')?.touched,
+          }"
+        >
+          Duracion (hrs) *
+        </label>
+        <p-input-number
+          class="w-full"
+          formControlName="duracion"
+          min="1"
+          [ngClass]="{
+            'border border-red-500 rounded-md':
+              capacitacionForm.get('duracion')?.invalid &&
+              capacitacionForm.get('duracion')?.touched,
+          }"
+        ></p-input-number>
+        <p
+          *ngIf="
+            capacitacionForm.get('duracion')?.invalid &&
+            capacitacionForm.get('duracion')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Ingrese la duracion de la capacitacion
+        </p>
+      </div>
+
+      <div>
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              capacitacionForm.get('fecha_inicio')?.invalid &&
+              capacitacionForm.get('fecha_inicio')?.touched,
+          }"
+        >
+          Fecha Inicio *
+        </label>
+        <p-date-picker
+          [style]="{ width: '100%' }"
+          formControlName="fecha_inicio"
+          appendTo="body"
+          [ngClass]="{
+            'border-red-500 focus:ring-red-500':
+              capacitacionForm.get('fecha_inicio')?.invalid &&
+              capacitacionForm.get('fecha_inicio')?.touched,
+          }"
+        ></p-date-picker>
+        <p
+          *ngIf="
+            capacitacionForm.get('fecha_inicio')?.invalid &&
+            capacitacionForm.get('fecha_inicio')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          La fecha de inicio es obligatoria
+        </p>
+      </div>
+
+      <div>
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              (capacitacionForm.get('fecha_fin')?.invalid &&
+                capacitacionForm.get('fecha_fin')?.touched) ||
+              capacitacionForm.hasError('fechaInvalida'),
+          }"
+        >
+          Fecha Fin *
+        </label>
+        <p-date-picker
+          [style]="{ width: '100%' }"
+          class="w-full"
+          appendTo="body"
+          formControlName="fecha_fin"
+          [ngClass]="{
+            'border-red-500 focus:ring-red-500':
+              (capacitacionForm.get('fecha_fin')?.invalid &&
+                capacitacionForm.get('fecha_fin')?.touched) ||
+              capacitacionForm.hasError('fechaInvalida'),
+          }"
+        ></p-date-picker>
+        <p
+          *ngIf="
+            capacitacionForm.get('fecha_fin')?.invalid &&
+            capacitacionForm.get('fecha_fin')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          La fecha de fin es obligatoria
+        </p>
+        <p
+          *ngIf="capacitacionForm.hasError('fechaInvalida')"
+          class="text-red-500 text-xs mt-1"
+        >
+          La fecha de fin no puede ser anterior a la fecha de inicio
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="md:col-span-2">
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              capacitacionForm.get('lugar')?.invalid &&
+              capacitacionForm.get('lugar')?.touched,
+          }"
+        >
+          Lugar *
+        </label>
+        <input
+          pInputText
+          formControlName="lugar"
+          appendTo="body"
+          class="w-full"
+          [ngClass]="{
+            'border border-red-500 rounded-md':
+              capacitacionForm.get('lugar')?.invalid &&
+              capacitacionForm.get('lugar')?.touched,
+          }"
+        />
+        <p
+          *ngIf="
+            capacitacionForm.get('lugar')?.invalid &&
+            capacitacionForm.get('lugar')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Indique el lugar de la capacitacion
+        </p>
+      </div>
+      <div>
+        <label
+          class="block text-sm font-medium mb-1"
+          [ngClass]="{
+            'text-red-600':
+              capacitacionForm.get('estatus_capacitacion')?.invalid &&
+              capacitacionForm.get('estatus_capacitacion')?.touched,
+          }"
+        >
+          Estatus Capacitacion *
+        </label>
+        <p-select
+          [options]="estadosCapacitacion"
+          formControlName="estatus_capacitacion"
+          appendTo="body"
+          class="w-full"
+          [ngClass]="{
+            'border border-red-500 rounded-md':
+              capacitacionForm.get('estatus_capacitacion')?.invalid &&
+              capacitacionForm.get('estatus_capacitacion')?.touched,
+          }"
+        ></p-select>
+        <p
+          *ngIf="
+            capacitacionForm.get('estatus_capacitacion')?.invalid &&
+            capacitacionForm.get('estatus_capacitacion')?.touched
+          "
+          class="text-red-500 text-xs mt-1"
+        >
+          Seleccione el estatus de la capacitacion
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-2 pt-4">
+      <button
+        pButton
+        type="button"
+        severity="contrast"
+        label="Cancelar"
+        (click)="visibleChange.emit(false)"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        [disabled]="capacitacionForm.invalid"
+        severity="success"
+        label="Guardar"
+      ></button>
+    </div>
+  </form>
+</p-dialog>

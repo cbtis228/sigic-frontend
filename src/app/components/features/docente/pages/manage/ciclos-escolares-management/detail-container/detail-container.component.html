@@ -1,0 +1,81 @@
+<div class="flex flex-col gap-6 p-6">
+  <!-- Skeleton loader mientras carga -->
+  <div
+    *ngIf="!cicloEscolar"
+    class="bg-gray-100 p-6 rounded-lg border border-gray-200 animate-pulse"
+  >
+    <div class="flex justify-between items-start mb-4">
+      <div class="w-full">
+        <div class="h-8 bg-gray-300 rounded w-1/2 mb-4"></div>
+        <div class="flex flex-wrap gap-6">
+          <div class="w-48">
+            <div class="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+            <div class="h-6 bg-gray-300 rounded w-3/4"></div>
+          </div>
+          <div class="w-48">
+            <div class="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+            <div class="h-6 bg-gray-300 rounded w-3/4"></div>
+          </div>
+          <div class="w-48">
+            <div class="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+            <div class="h-6 bg-gray-300 rounded w-3/4"></div>
+          </div>
+        </div>
+      </div>
+      <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+    </div>
+  </div>
+
+  <!-- Información del ciclo escolar -->
+  <div
+    *ngIf="cicloEscolar"
+    class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm"
+  >
+    <div class="flex justify-between items-start mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">
+          {{ cicloEscolar.nombre_ciclo }}
+        </h2>
+
+        <div class="flex flex-wrap gap-6">
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Fecha de Inicio</p>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ cicloEscolar.fecha_inicio | date: "longDate" }}
+            </p>
+          </div>
+
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Fecha de Fin</p>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ cicloEscolar.fecha_fin | date: "longDate" }}
+            </p>
+          </div>
+
+          <div>
+            <p class="text-sm text-gray-600 font-medium">Estatus</p>
+            <span
+              class="px-3 py-1 rounded-full text-sm font-medium border {{
+                getEstatusClass(cicloEscolar.estatus)
+              }}"
+            >
+              {{ getEstatusText(cicloEscolar.estatus) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-2">
+        <p-button
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          [rounded]="true"
+          label="Regresar"
+          [text]="true"
+          routerLink=".."
+        />
+      </div>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>

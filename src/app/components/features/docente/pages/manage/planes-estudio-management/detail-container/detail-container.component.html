@@ -1,0 +1,94 @@
+<div class="flex flex-col gap-6 p-6">
+  <!-- Skeleton loader mientras carga -->
+  <div
+    *ngIf="!planEstudio"
+    class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm animate-pulse"
+  >
+    <div class="flex justify-between items-start mb-4">
+      <div class="w-full">
+        <div class="h-8 bg-gray-200 rounded-lg w-1/2 mb-4"></div>
+        <div class="flex flex-wrap gap-6">
+          <div class="w-48">
+            <div class="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+            <div class="h-6 bg-gray-200 rounded-lg w-3/4"></div>
+          </div>
+          <div class="w-48">
+            <div class="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+            <div class="h-6 bg-gray-200 rounded-lg w-3/4"></div>
+          </div>
+          <div class="w-48">
+            <div class="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+            <div class="h-6 bg-gray-200 rounded-lg w-3/4"></div>
+          </div>
+        </div>
+      </div>
+      <div class="w-10 h-10 bg-gray-200 rounded-full"></div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="planEstudio"
+    class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm"
+  >
+    <div class="flex justify-between items-start mb-6">
+      <div class="w-full">
+        <div class="flex items-center gap-3 mb-4">
+          <h2 class="text-2xl font-bold text-gray-800">
+            {{ planEstudio.nombre }}
+          </h2>
+          <span
+            class="px-3 py-1 rounded-full text-sm font-medium border {{
+              getEstatusClass(planEstudio.estatus)
+            }}"
+          >
+            {{ planEstudio.estatus | defaultEstatusValue }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+            <p class="text-sm text-gray-500 font-medium mb-1">Nivel</p>
+            <p class="text-lg font-semibold text-gray-800">
+              {{ planEstudio.nivel }}
+            </p>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+            <p class="text-sm text-gray-500 font-medium mb-1">
+              Vigencia Inicio
+            </p>
+            <p class="text-lg font-semibold text-gray-800">
+              {{ planEstudio.vigencia_inicio }}
+            </p>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+            <p class="text-sm text-gray-500 font-medium mb-1">Vigencia Fin</p>
+            <p class="text-lg font-semibold text-gray-800">
+              {{ planEstudio.vigencia_fin }}
+            </p>
+          </div>
+
+          <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+            <p class="text-sm text-gray-500 font-medium mb-1">Total Materias</p>
+            <p class="text-lg font-semibold text-gray-800">
+              {{ planEstudio.materias.length }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-4">
+      <p-button
+        icon="pi pi-arrow-left"
+        severity="secondary"
+        [rounded]="true"
+        label="Regresar"
+        [text]="true"
+        routerLink=".."
+      />
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>

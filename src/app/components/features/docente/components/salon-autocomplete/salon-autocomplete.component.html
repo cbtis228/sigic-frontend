@@ -1,0 +1,20 @@
+<div class="w-full">
+  <p-autocomplete
+    id="salon-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    appendTo="body"
+    [showClear]="showClear"
+    (completeMethod)="filterSalons($event)"
+    (onSelect)="onSalonSelect($event)"
+    (onClear)="onSalonClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="salones"
+    [(ngModel)]="selectedSalon"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    optionLabel="nombre"
+    class="w-full shadow-sm rounded-lg"
+  >
+  </p-autocomplete>
+</div>

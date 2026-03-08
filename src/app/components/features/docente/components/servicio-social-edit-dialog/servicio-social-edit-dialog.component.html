@@ -1,0 +1,103 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  styleClass="h-3/4 w-full md:w-3/4"
+  [responsive]="true"
+  [closable]="true"
+  (onHide)="visibleChange.emit(false)"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-lg font-semibold">Editar Servicio Social</h2>
+  </ng-template>
+
+  <form
+    [formGroup]="servicioForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4"
+  >
+    <!-- Alumno -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Alumno *</label>
+      <app-alumno-autocomplete
+        formControlName="alumno"
+      ></app-alumno-autocomplete>
+      <p
+        *ngIf="servicioForm.get('alumno')?.invalid && servicioForm.get('alumno')?.touched"
+        class="text-red-500 text-xs mt-1"
+      >
+        Este campo es obligatorio
+      </p>
+    </div>
+
+    <!-- Actividad -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Actividad *</label>
+      <input
+        type="text"
+        formControlName="actividad"
+        class="w-full p-2 border rounded-md"
+        [ngClass]="{
+          'border-red-500': servicioForm.get('actividad')?.invalid && servicioForm.get('actividad')?.touched
+        }"
+      />
+    </div>
+
+    <!-- Fecha Inicio -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Fecha Inicio *</label>
+      <p-datepicker
+        formControlName="fecha_inicio"
+        [style]="{ width: '100%' }"
+      ></p-datepicker>
+    </div>
+
+    <!-- Fecha Fin -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Fecha Fin</label>
+      <p-datepicker
+        formControlName="fecha_fin"
+        [style]="{ width: '100%' }"
+      ></p-datepicker>
+    </div>
+
+    <!-- Responsable -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Responsable *</label>
+      <input
+        type="text"
+        formControlName="responsable"
+        class="w-full p-2 border rounded-md"
+      />
+    </div>
+
+    <!-- Estatus -->
+    <div>
+      <label class="block text-sm font-medium mb-1">Estatus</label>
+      <p-select
+        [options]="estatuses"
+        optionLabel="label"
+        optionValue="value"
+        formControlName="estatus"
+        class="w-full"
+      ></p-select>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-2 pt-4">
+      <button
+        type="button"
+        pButton
+        (click)="visibleChange.emit(false)"
+        label="Cancelar"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        [disabled]="servicioForm.invalid"
+        severity="success"
+        label="Guardar"
+      ></button>
+    </div>
+  </form>
+</p-dialog>
+

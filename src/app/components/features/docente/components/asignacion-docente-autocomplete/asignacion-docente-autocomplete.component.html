@@ -1,0 +1,24 @@
+<div class="w-full">
+  <p-autocomplete
+    id="docente-autocomplete"
+    dropdown="true"
+    [placeholder]="placeholder"
+    appendTo="body"
+    [showClear]="showClear"
+    (completeMethod)="filterAsignacionDocentes($event)"
+    (onSelect)="onAsignacionDocenteSelect($event)"
+    (onClear)="onAsignacionDocenteClear()"
+    [forceSelection]="forceSelection"
+    [suggestions]="AsignacionDocentes"
+    [(ngModel)]="selectedAsignacionDocente"
+    [disabled]="disabled"
+    [style]="{ width: '100%' }"
+    class="w-full shadow-sm rounded-lg"
+  >
+  </p-autocomplete>
+  <ng-template let-asignacion pTemplate="item">
+    {{ asignacion.grupo.nombre_grupo }} -
+    {{ asignacion.materia.nombre_materia }} - {{ asignacion.docente.nombres }}
+    {{ asignacion.docente.paterno }} {{ asignacion.docente.materno }}
+  </ng-template>
+</div>

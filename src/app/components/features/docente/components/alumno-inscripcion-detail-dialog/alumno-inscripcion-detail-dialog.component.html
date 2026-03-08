@@ -1,0 +1,76 @@
+<p-dialog
+  *ngIf="inscripcion"
+  header="Detalles de Inscripción"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '600px' }"
+  [closable]="true"
+  [resizable]="false"
+  (onHide)="visibleChange.emit(false)"
+>
+  <div class="space-y-4 p-4">
+    <!-- Alumno -->
+    <div class="border-b border-gray-200 pb-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">Alumno</h3>
+      <p class="text-gray-600">
+        {{ inscripcion.alumno.numero_control }} -
+        {{ inscripcion.alumno.nombres }}
+        {{ inscripcion.alumno.paterno }}
+        {{ inscripcion.alumno.materno }}
+      </p>
+    </div>
+
+    <!-- Grupo -->
+    <div class="border-b border-gray-200 pb-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">Grupo</h3>
+      <p class="text-gray-600">
+        {{ inscripcion.grupo.nombre_grupo }} (Nivel
+        {{ inscripcion.grupo.nivel }})
+      </p>
+      <p class="text-gray-600">
+        Ciclo escolar: {{ inscripcion.grupo.ciclo_escolar!.nombre_ciclo }}
+      </p>
+      <p class="text-gray-600">
+        Turno: {{ inscripcion.grupo.turno }} | Docente:
+        {{ inscripcion.grupo.docente!.nombres }}
+        {{ inscripcion.grupo.docente!.paterno }}
+      </p>
+      <p class="text-gray-600">
+        Capacidad máxima: {{ inscripcion.grupo.capacidad_maxima }}
+      </p>
+    </div>
+
+    <!-- Inscripción -->
+    <div class="border-b border-gray-200 pb-2">
+      <h3 class="text-lg font-semibold text-gray-800 mb-1">Inscripción</h3>
+      <p class="text-gray-600">Fecha: {{ inscripcion.fecha_inscripcion }}</p>
+      <p class="text-gray-600">
+        Estatus:
+        <span
+          [ngClass]="{
+            'bg-green-100 text-green-800': inscripcion.estatus === 1,
+            'bg-orange-100 text-orange-800': inscripcion.estatus === 2,
+          }"
+          class="px-2 py-1 text-xs rounded-full"
+        >
+          {{ inscripcion.estatus === 1 ? "Activo" : "Pendiente" }}
+        </span>
+      </p>
+      <p class="text-gray-600" *ngIf="inscripcion.observaciones">
+        Observaciones: {{ inscripcion.observaciones }}
+      </p>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cerrar"
+        class="p-button-text text-gray-700 hover:text-gray-900"
+        (click)="visibleChange.emit(false)"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

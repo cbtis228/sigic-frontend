@@ -1,0 +1,344 @@
+<div class="min-h-screen p-4 md:p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header Principal -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+      >
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-3xl font-bold text-gray-800">
+              Gestión de Servicio Social
+            </h1>
+          </div>
+          <p class="text-gray-600 mt-2">
+            Administra y da seguimiento al servicio social de los alumnos
+          </p>
+        </div>
+        <div>
+          <button
+            pButton
+            (click)="showCreateServicioSocialDialog = true"
+            *ngIf="
+              permissionsService.has$('academico.add_serviciosocial') | async
+            "
+            label="Registrar servicio social"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <h3
+        class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+      >
+        <i class="pi pi-filter text-green-600"></i> Filtros de Búsqueda
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Búsqueda Global -->
+        <div class="col-span-1 md:col-span-2">
+          <label
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-search text-gray-500"></i> Búsqueda Global
+          </label>
+          <div class="relative">
+            <i class="pi pi-search absolute left-3 top-2.5 text-gray-400"></i>
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="globalFilter"
+              placeholder="Alumno, actividad, responsable..."
+              class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <!-- Alumno -->
+        <div>
+          <label
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-user text-purple-500"></i> Alumno
+          </label>
+          <app-alumno-autocomplete
+            [(ngModel)]="alumnoFilter"
+            [estatus]="null"
+            class="w-full"
+          ></app-alumno-autocomplete>
+        </div>
+
+        <!-- Estatus -->
+        <div>
+          <label
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-check-circle text-green-500"></i> Estatus
+          </label>
+          <p-select
+            [options]="estatuses"
+            [(ngModel)]="estatusFilter"
+            class="w-full"
+            placeholder="Seleccionar estatus"
+          ></p-select>
+        </div>
+
+        <!-- Fecha Inicio -->
+        <div>
+          <label
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-calendar text-cyan-500"></i> Fecha de inicio
+          </label>
+          <p-datepicker
+            [(ngModel)]="fechaInicioFilter"
+            class="w-full"
+            placeholder="Seleccionar fecha"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [style]="{ width: '100%' }"
+          >
+          </p-datepicker>
+        </div>
+
+        <!-- Fecha Fin -->
+        <div>
+          <label
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-calendar-times text-red-500"></i> Fecha de fin
+          </label>
+          <p-datepicker
+            [(ngModel)]="fechaFinFilter"
+            class="w-full"
+            placeholder="Seleccionar fecha"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            [style]="{ width: '100%' }"
+          >
+          </p-datepicker>
+        </div>
+        <div>
+          <label
+            class="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2"
+          >
+            <i class="pi pi-info text-orange-500"></i> Estatus
+          </label>
+          <p-select
+            [options]="completadoEstatuses"
+            [(ngModel)]="completadoFilter"
+            class="w-full"
+            placeholder="Seleccionar estatus"
+          ></p-select>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-4 mt-4">
+        <div class="flex justify-end gap-3">
+          <button
+            class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            (click)="clearFilters()"
+          >
+            Limpiar
+          </button>
+          <button
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            (click)="onTableEvent()"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div *ngIf="!servicioSocialData" class="p-6">
+        <div class="animate-pulse">
+          <!-- Skeleton para encabezados de tabla -->
+          <div class="flex space-x-4 mb-6">
+            <div class="h-4 bg-gray-200 rounded w-1/4"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/6"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/6"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/8"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/8"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/8"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/6"></div>
+          </div>
+
+          <!-- Skeleton para filas de tabla -->
+          <div class="space-y-4">
+            <div
+              *ngFor="let item of [1, 2, 3, 4, 5]"
+              class="flex space-x-4 items-center py-3"
+            >
+              <div class="flex items-center space-x-3 w-1/4">
+                <div class="h-10 w-10 bg-gray-200 rounded-full"></div>
+                <div class="space-y-2">
+                  <div class="h-3 bg-gray-200 rounded w-24"></div>
+                  <div class="h-2 bg-gray-200 rounded w-16"></div>
+                </div>
+              </div>
+              <div class="h-3 bg-gray-200 rounded w-1/6"></div>
+              <div class="h-6 bg-gray-200 rounded w-1/6"></div>
+              <div class="h-3 bg-gray-200 rounded w-1/8"></div>
+              <div class="h-6 bg-gray-200 rounded w-1/8"></div>
+              <div class="h-6 bg-gray-200 rounded w-1/8"></div>
+              <div class="h-8 bg-gray-200 rounded w-1/6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Tabla con datos -->
+      <div *ngIf="servicioSocialData" class="p-0">
+        <p-table
+          [value]="servicioSocialData.results"
+          [lazyLoadOnInit]="false"
+          [paginator]="true"
+          [rows]="10"
+          [totalRecords]="servicioSocialData.count"
+          [rowsPerPageOptions]="[10, 20, 30]"
+          [lazy]="true"
+          (onLazyLoad)="onTableEvent($event)"
+          styleClass="p-datatable-striped p-datatable-gridlines"
+          [tableStyle]="{ 'min-width': '75rem' }"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          currentPageReportTemplate="Mostrando {first} - {last} de {totalRecords} registros"
+        >
+          <ng-template #caption>
+            <div class="flex items-center justify-between">
+              <span class="text-xl font-bold">Lista de servicio social</span>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="alumno__nombres" style="width: 20%">
+                Alumno <p-sortIcon field="alumno__nombres"></p-sortIcon>
+              </th>
+              <th pSortableColumn="actividad" style="width: 20%">
+                Actividad <p-sortIcon field="actividad"></p-sortIcon>
+              </th>
+              <th pSortableColumn="fecha_inicio" style="width: 12%">
+                Fecha Inicio <p-sortIcon field="fecha_inicio"></p-sortIcon>
+              </th>
+              <th pSortableColumn="fecha_fin" style="width: 12%">
+                Fecha Fin <p-sortIcon field="fecha_fin"></p-sortIcon>
+              </th>
+              <th pSortableColumn="horas_acumuladas" style="width: 12%">
+                Horas <p-sortIcon field="horas_acumuladas"></p-sortIcon>
+              </th>
+              <th pSortableColumn="completado" style="width: 12%">
+                Completado <p-sortIcon field="completado"></p-sortIcon>
+              </th>
+              <th pSortableColumn="estatus" style="width: 12%">
+                Estatus <p-sortIcon field="estatus"></p-sortIcon>
+              </th>
+              <th style="width: 12%">Acciones</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-servicio>
+            <tr>
+              <td>
+                <div class="text-sm font-medium text-gray-900">
+                  {{ servicio.alumno?.nombres }}
+                  {{ servicio.alumno?.paterno }}
+                  {{ servicio.alumno?.materno }}
+                </div>
+              </td>
+              <td class="text-sm text-gray-900">
+                {{ servicio.actividad }}
+              </td>
+              <td class="text-sm text-gray-900">
+                {{ servicio.fecha_inicio | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="text-sm text-gray-900">
+                {{ servicio.fecha_fin | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="text-sm text-gray-900">
+                {{ servicio.horas_acumuladas }}
+              </td>
+              <td class="text-sm text-gray-900">
+                <span
+                  class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                  [ngClass]="getEstatusBadgeClass(servicio.completado ? 1 : 4)"
+                >
+                  {{ servicio.completado ? "Completado" : "En Proceso" }}
+                </span>
+              </td>
+              <td>
+                <span
+                  class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
+                  [ngClass]="getEstatusBadgeClass(servicio.estatus)"
+                >
+                  {{ servicio.estatus_display }}
+                </span>
+              </td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <p-menu
+                    #menu
+                    appendTo="body"
+                    [model]="menuItems"
+                    [popup]="true"
+                  ></p-menu>
+
+                  <p-button
+                    icon="pi pi-ellipsis-v"
+                    severity="secondary"
+                    [rounded]="true"
+                    [text]="true"
+                    (click)="updateMenuItems(servicio); menu.toggle($event)"
+                  />
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="text-center py-8">
+                <div
+                  class="flex flex-col items-center justify-center text-gray-500"
+                >
+                  <i class="pi pi-inbox text-4xl mb-2"></i>
+                  <p class="text-lg">No se encontraron registros</p>
+                  <p class="text-sm">Intenta ajustar los filtros de búsqueda</p>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</div>
+<app-servicio-social-create-dialog
+  [(visible)]="showCreateServicioSocialDialog"
+  (onServicioSocialCreate)="onServicioSocialCreate($event)"
+></app-servicio-social-create-dialog>
+<app-servicio-social-detail-dialog
+  [(visible)]="showDetailIncidenciaDialog"
+  [servicio]="selectedServicioSocial"
+></app-servicio-social-detail-dialog>
+<app-servicio-social-edit-dialog
+  [(visible)]="showEditIncidenciaDialog"
+  [servicio]="selectedServicioSocial"
+  (onServicioUpdate)="onServicioSocialUpdate($event)"
+></app-servicio-social-edit-dialog>
+
+<app-servicio-social-avances-dialog
+  [(visible)]="showRegistrarAvancesDialog"
+  [servicioSocial]="selectedServicioSocial"
+  [registroHorasServicioSocial]="selectedServicioSocialRegistroHoras"
+  [filesServicioSocial]="selectedServicioSocialFiles"
+  (saveRegistrarHoras)="onSaveRegistrarHoras($event)"
+  (deleteRegistrarHoras)="onDeleteRegistroHoras($event)"
+  (uploadFile)="onUploadFile($event)"
+  (downloadFile)="downloadFile($event)"
+  (deleteFile)="onDeleteFile($event.id)"
+  [result$]="registrarHorasResult$"
+></app-servicio-social-avances-dialog>

@@ -1,0 +1,300 @@
+<div class="min-h-screen">
+  <form
+    [formGroup]="alumnoForm"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!showSkeletons; else loadingTemplate"
+    class="max-w-5xl mx-auto"
+  >
+    <app-card-with-title [title]="'Información General'">
+      <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-5">
+            <div class="field">
+              <label
+                for="nombres"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-user text-sm"></i>
+                </span>
+                Nombres <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                id="nombres"
+                formControlName="nombres"
+                class="w-full p-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                placeholder="Ingrese los nombres completos"
+              />
+              <small
+                class="text-red-500 text-xs mt-1 block"
+                *ngIf="
+                  alumnoForm.get('nombres')?.invalid &&
+                  alumnoForm.get('nombres')?.touched
+                "
+              >
+                Los nombres son requeridos
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="paterno"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-id-card text-sm"></i>
+                </span>
+                Apellido Paterno <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                id="paterno"
+                formControlName="paterno"
+                class="w-full p-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                placeholder="Apellido paterno"
+              />
+              <small
+                class="text-red-500 text-xs mt-1 block"
+                *ngIf="
+                  alumnoForm.get('paterno')?.invalid &&
+                  alumnoForm.get('paterno')?.touched
+                "
+              >
+                El apellido paterno es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="telefono"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-green-100 text-green-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-phone text-sm"></i>
+                </span>
+                Teléfono
+              </label>
+              <input
+                pInputText
+                type="tel"
+                id="telefono"
+                formControlName="telefono"
+                class="w-full p-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                placeholder="(000) 000-0000"
+              />
+            </div>
+
+            <div class="field">
+              <label
+                for="discapacidades"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-purple-100 text-purple-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-face-smile text-sm"></i>
+                </span>
+                Discapacidades
+              </label>
+              <textarea
+                pTextarea
+                id="discapacidades"
+                formControlName="discapacidades"
+                rows="2"
+                class="w-full"
+                placeholder="Indique si existe alguna discapacidad"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div class="field">
+              <label
+                for="materno"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-id-card text-sm"></i>
+                </span>
+                Apellido Materno <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                id="materno"
+                formControlName="materno"
+                class="w-full p-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                placeholder="Apellido materno"
+              />
+              <small
+                class="text-red-500 text-xs mt-1 block"
+                *ngIf="
+                  alumnoForm.get('materno')?.invalid &&
+                  alumnoForm.get('materno')?.touched
+                "
+              >
+                El apellido materno es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="domicilio"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-orange-100 text-orange-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-home text-sm"></i>
+                </span>
+                Domicilio
+              </label>
+              <input
+                pInputText
+                type="text"
+                id="domicilio"
+                formControlName="domicilio"
+                class="w-full p-3.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                placeholder="Ingrese la dirección completa"
+              />
+            </div>
+
+            <div class="field" *ngIf="showStatus">
+              <label
+                for="estatus"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-blue-100 text-blue-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-info-circle text-sm"></i>
+                </span>
+                Estatus
+              </label>
+              <p-select
+                inputId="estatus"
+                formControlName="estatus"
+                [options]="estadosAlumno"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un estatus"
+                class="w-full"
+                appendTo="body"
+                [class]="{
+                  'p-invalid':
+                    alumnoForm.get('estatus')?.invalid &&
+                    alumnoForm.get('estatus')?.touched,
+                }"
+              ></p-select>
+              <small
+                class="text-red-500 text-xs mt-1 block"
+                *ngIf="
+                  alumnoForm.get('estatus')?.invalid &&
+                  alumnoForm.get('estatus')?.touched
+                "
+              >
+                El estatus es requerido
+              </small>
+            </div>
+            <div class="field">
+              <label
+                for="enfermedades"
+                class="block text-sm font-medium text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-red-100 text-red-600 rounded-lg p-2 mr-3 inline-flex items-center justify-center"
+                >
+                  <i class="pi pi-heart text-sm"></i>
+                </span>
+                Enfermedades
+              </label>
+              <textarea
+                pTextarea
+                id="enfermedades"
+                formControlName="enfermedades"
+                rows="2"
+                [autoResize]="true"
+                class="w-full"
+                placeholder="Describa si existe alguna enfermedad"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-card-with-title>
+
+    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 px-2">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined p-button-secondary shadow-md hover:shadow-lg transition-all duration-300 py-3 px-5 rounded-lg"
+        icon="pi pi-arrow-left"
+        label="Regresar"
+        routerLink=".."
+      ></button>
+      <button
+        pButton
+        type="submit"
+        class="shadow-md hover:shadow-lg transition-all duration-300 py-3 px-5 rounded-lg"
+        icon="pi pi-check"
+        iconPos="right"
+        label="Guardar Cambios"
+        [disabled]="alumnoForm.invalid"
+        [class]="{
+          'p-button-success': !alumnoForm.invalid,
+          'p-button-disabled': alumnoForm.invalid,
+          'opacity-100': !alumnoForm.invalid,
+          'opacity-70': alumnoForm.invalid,
+        }"
+      ></button>
+    </div>
+  </form>
+
+  <ng-template #loadingTemplate>
+    <div class="max-w-5xl mx-auto">
+      <app-card-with-title [title]="'Información General'">
+        <div class="p-5 bg-blue-50/30">
+          <div class="animate-pulse">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="space-y-5">
+                <div *ngFor="let item of [1, 2, 3]" class="space-y-3">
+                  <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div class="h-12 bg-gray-300 rounded-lg"></div>
+                </div>
+              </div>
+              <div class="space-y-5">
+                <div *ngFor="let item of [1, 2, 3]" class="space-y-3">
+                  <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div class="h-12 bg-gray-300 rounded-lg"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 space-y-5">
+              <div *ngFor="let item of [1, 2]" class="space-y-3">
+                <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+                <div class="h-12 bg-gray-300 rounded-lg"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="flex justify-end gap-4 mt-8 px-2">
+        <div class="h-12 bg-gray-300 rounded-lg w-32 animate-pulse"></div>
+        <div class="h-12 bg-gray-300 rounded-lg w-40 animate-pulse"></div>
+      </div>
+    </div>
+  </ng-template>
+</div>

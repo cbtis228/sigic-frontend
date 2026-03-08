@@ -1,0 +1,74 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import "primeflex/primeflex.css"; */
+@import "primeicons/primeicons.css";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: "Montserrat", sans-serif;
+}
+
+.main-text {
+  font-family: "Roboto Mono", monospace;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.error-container span {
+  color: red;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.p-toast {
+  max-width: calc(100vw - 40px);
+}
+
+.p-inputtext:enabled:focus,
+.p-inputtext:enabled:focus-within,
+.p-inputtext:enabled:hover {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 1px #3b82f6 !important;
+}
+
+* {
+  /* Override icon size */
+  --p-toast-border-width: 4px 4px 4px 4px !important; /* Adjust to your desired size */
+  --p-toast-info-background: light-dark(
+    var(--p-surface-100),
+    var(--p-surface-900)
+  );
+  --p-toast-info-color: light-dark(var(--p-surface-900), var(--p-surface-100));
+  --p-toast-info-detail-color: light-dark(
+    var(--p-surface-900),
+    var(--p-surface-100)
+  );
+  --p-toast-success-background: light-dark(
+    var(--p-surface-100),
+    var(--p-surface-900)
+  );
+  --p-toast-success-color: light-dark(
+    var(--p-surface-900),
+    var(--p-surface-100)
+  );
+  --p-toast-success-detail-color: light-dark(
+    var(--p-surface-900),
+    var(--p-surface-100)
+  );
+  --p-toast-error-background: light-dark(
+    var(--p-surface-100),
+    var(--p-surface-900)
+  );
+  --p-toast-error-color: light-dark(var(--p-surface-900), var(--p-surface-100));
+  --p-toast-error-detail-color: light-dark(
+    var(--p-surface-900),
+    var(--p-surface-100)
+  );
+}

@@ -1,0 +1,166 @@
+<p-dialog
+  [(visible)]="visible"
+  (onHide)="visibleChange.emit(false)"
+  header="Agregar nueva hora"
+  styleClass="w-3/4"
+>
+  <div class="p-2 md:p-6 space-y-6 rounded-lg">
+    <form [formGroup]="horarioForm" class="space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="md:col-span-2">
+          <label for="docente" class="block text-sm font-medium text-gray-700"
+            >Asignacion Docente *</label
+          >
+          <app-asignacion-docente-autocomplete
+            [cicloEscolar]="grupo!.ciclo_escolar.id!"
+            formControlName="asignacion_docente"
+          >
+          </app-asignacion-docente-autocomplete>
+          <small
+            *ngIf="
+              horarioForm.get('asignacion_docente')?.invalid &&
+              horarioForm.get('asignacion_docente')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar una asignacion docente
+          </small>
+        </div>
+        <div class="space-y-2">
+          <label
+            for="dia_semana"
+            class="block text-sm font-medium text-gray-700"
+            >Dia Semana *</label
+          >
+          <p-multiselect
+            [options]="diasSemana"
+            class="w-full"
+            formControlName="dia_semana"
+            appendTo="body"
+          ></p-multiselect>
+          <small
+            *ngIf="
+              horarioForm.get('dia_semana')?.invalid &&
+              horarioForm.get('dia_semana')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar un dia semana
+          </small>
+        </div>
+        <div class="space-y-2">
+          <label
+            for="hora_inicio"
+            class="block text-sm font-medium text-gray-700"
+          >
+            Hora Inicio *
+          </label>
+
+          <p-datepicker
+            id="hora_inicio"
+            formControlName="hora_inicio"
+            [showTime]="true"
+            [showSeconds]="false"
+            [timeOnly]="true"
+            hourFormat="24"
+            placeholder="Selecciona la hora"
+            appendTo="body"
+            inputId="time-only"
+            styleClass="w-full"
+            [class]="{
+              'p-invalid':
+                horarioForm.get('hora_inicio')?.invalid &&
+                horarioForm.get('hora_inicio')?.touched,
+            }"
+          >
+          </p-datepicker>
+
+          <small
+            *ngIf="
+              horarioForm.get('hora_inicio')?.invalid &&
+              horarioForm.get('hora_inicio')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar una hora de inicio
+          </small>
+        </div>
+
+        <div class="space-y-2">
+          <label for="hora_fin" class="block text-sm font-medium text-gray-700">
+            Hora Fin *
+          </label>
+
+          <p-datepicker
+            id="hora_fin"
+            appendTo="body"
+            formControlName="hora_fin"
+            [showTime]="true"
+            [showSeconds]="false"
+            [timeOnly]="true"
+            hourFormat="24"
+            placeholder="Selecciona la hora"
+            styleClass="w-full"
+            [class]="{
+              'p-invalid':
+                horarioForm.get('hora_fin')?.invalid &&
+                horarioForm.get('hora_fin')?.touched,
+            }"
+          >
+          </p-datepicker>
+
+          <small
+            *ngIf="
+              horarioForm.get('hora_fin')?.invalid &&
+              horarioForm.get('hora_fin')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar una hora de fin
+          </small>
+        </div>
+
+        <div class="space-y-2">
+          <label for="salon" class="block text-sm font-medium text-gray-700">
+            Salon
+          </label>
+          <app-salon-autocomplete
+            formControlName="salon"
+          >
+          </app-salon-autocomplete>
+            <small
+            *ngIf="
+              horarioForm.get('salon')?.invalid &&
+              horarioForm.get('salon')?.touched
+            "
+            class="text-red-500 text-xs font-medium"
+          >
+            Debe seleccionar un salon
+          </small>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end space-x-3">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="p-button-text text-gray-600 hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors"
+        (click)="visibleChange.emit(false)"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        label="Asignar"
+        severity="info"
+        icon="pi pi-check"
+        (click)="onSubmit()"
+        [disabled]="horarioForm.invalid"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

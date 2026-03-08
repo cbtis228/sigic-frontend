@@ -1,0 +1,33 @@
+<div [formGroup]="form" [id]="control.name" class="form-group">
+  <label [for]="control.name"
+    class="block text-sm font-medium">{{fieldLabel}}</label>
+  <div *ngIf="!viewMode; else view" class="mt-1">
+    <input 
+      [required]="required"
+      pInputText 
+      [readOnly]="readonly"
+      [id]="control.name" 
+      [type]="control.type" 
+      [formControlName]="control.name" 
+      class="w-full"
+      [ngClass]="control.classList!"
+      [ngClass]="validadoresService.campoInvalido(form.controls[control.name]!) ? 'ng-invalid ng-dirty' : ''"
+      [minlength]="control.minlength!" 
+      [maxlength]="control.maxlength!" 
+      [placeholder]="control.placeholder || ''" 
+      [pattern]="control.pattern!"
+      [autocomplete]="'off'"
+    >
+    <ng-container *ngIf="validadoresService.campoInvalido(form.controls[control.name]!)">
+      <div class="error-container">
+        <small class="small error"
+          *ngFor="let error of validadoresService.obtenerErrores(form.controls[control.name]!)">
+          <span>{{error!.message}}</span>
+        </small>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #view>
+    {{form.get(control.name)?.value}}
+  </ng-template>
+</div>

@@ -1,0 +1,33 @@
+<div [formGroup]="form" [id]="control.name" class="form-group">
+  <label [for]="control.name"
+    class="block text-sm font-medium">{{fieldLabel}}</label>
+  <div *ngIf="!viewMode; else view" class="mt-1">
+    <p-datepicker 
+      [required]="required"
+      pInputText 
+      [id]="control.name" 
+      [formControlName]="control.name"
+      [ngClass]="control.classList!"
+      [ngClass]="validadoresService.campoInvalido(form.controls[control.name]!) ? 'ng-invalid ng-dirty' : ''"
+      class="w-full"
+      [minlength]="control.minlength!" 
+      [maxlength]="control.maxlength!" 
+      [placeholder]="control.placeholder || ''" 
+      [pattern]="control.pattern!"
+      [style]="{'width':'100%'}"
+      [inputStyle]="{'width':'100%'}"
+      dateFormat="dd/mm/yy"
+    />
+    <ng-container *ngIf="validadoresService.campoInvalido(form.controls[control.name]!)">
+      <div class="error-container">
+        <small class="small error"
+          *ngFor="let error of validadoresService.obtenerErrores(form.controls[control.name]!)">
+          <span>{{error!.message}}</span>
+        </small>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #view>
+    {{form.get(control.name)?.value}}
+  </ng-template>
+</div>

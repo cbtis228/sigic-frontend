@@ -1,0 +1,22 @@
+{
+  "users": {
+    "form": {
+      "email": "Email",
+      "password": "Password",
+      "profile_id": "Profile"
+    },
+    "table": {
+      "email": "Email",
+      "profile": "Profile",
+      "status": "Status"
+    }
+  },
+  "general": {
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  }
+}

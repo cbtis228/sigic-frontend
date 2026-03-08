@@ -1,0 +1,204 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
+      <div class="flex items-center gap-3 mb-4">
+        <button
+          routerLink=".."
+          class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-arrow-left text-gray-600"></i>
+        </button>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Crear Materia</h1>
+          <p class="text-gray-600">Completa la información de la materia</p>
+        </div>
+      </div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onMateriaSave()" class="space-y-6">
+      <app-card-with-title [title]="'Información del Materia'">
+        <div class="space-y-6">
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-calendar text-blue-500"></i>
+              Información Académica
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="nombre"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Nombre *
+                </label>
+                <input
+                  pInputText
+                  id="nombre"
+                  placeholder="Ej: Quimica 2"
+                  formControlName="nombre"
+                  class="w-full"
+                  [ngClass]="{
+                    'p-invalid':
+                      form.get('nombre')?.invalid &&
+                      form.get('nombre')?.touched,
+                  }"
+                />
+                <small
+                  *ngIf="
+                    form.get('nombre')?.invalid && form.get('nombre')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El nombre es requerido
+                </small>
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="clave"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Clave *
+                </label>
+                <input
+                  pInputText
+                  type="text"
+                  formControlName="clave"
+                  id="clave"
+                  class="w-full"
+                  placeholder="Ej: Q1-2025-S2"
+                  [ngClass]="{
+                    'p-invalid':
+                      form.get('clave')?.invalid &&
+                      form.get('clave')?.touched,
+                  }"
+                />
+                <small
+                  class="text-red-500 text-xs"
+                  *ngIf="
+                    form.get('clave')?.invalid && form.get('clave')?.touched
+                  "
+                >
+                  La clave es requerida
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-tag text-blue-500"></i>
+              Creditos
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="space-y-2">
+                <label
+                  for="creditos"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Creditos
+                </label>
+                <p-inputNumber
+                  id="creditos"
+                  type="text"
+                  formControlName="creditos"
+                  placeholder="Ej: 1-F Pedro"
+                  class="w-full"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="horas_teorica"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Horas Teoricas
+                </label>
+                <p-inputnumber
+                  type="number"
+                  class="w-full"
+                  formControlName="horas_teorica"
+                  id="horas_teorica"
+                  placeholder="Ej: 60"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="horas_practica"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Horas Practicas
+                </label>
+                <p-inputnumber
+                  formControlName="horas_practica"
+                  id="horas_practica"
+                  class="w-full"
+                  placeholder="Ej: 80"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-chart-bar text-blue-500"></i>
+              Configuración
+            </h2>
+
+            <div class="grid grid-cols-1">
+              <div class="space-y-2">
+                <label
+                  for="seriacion"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Seriacion
+                </label>
+                <textarea
+                  pTextarea
+                  formControlName="seriacion"
+                  id="seriacion"
+                  class="w-full"
+                  placeholder="Ej: Primer Semestre"
+                  [autoResize]="true"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3 pt-6">
+        <button
+          pButton
+          type="button"
+          severity="secondary"
+          icon="pi pi-arrow-left"
+          label="Regresar"
+          routerLink=".."
+          class="px-4 py-2"
+        ></button>
+
+        <button
+          pButton
+          type="submit"
+          severity="info"
+          icon="pi pi-check-square"
+          iconPos="right"
+          label="Guardar Materia"
+          [disabled]="form.invalid"
+          class="px-4 py-2"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>

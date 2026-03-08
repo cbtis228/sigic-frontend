@@ -1,0 +1,321 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-4">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="bg-white rounded-2xl shadow-sm p-6 mb-6 border border-gray-100">
+      <div class="flex items-center gap-3 mb-4">
+        <button
+          routerLink=".."
+          class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <i class="pi pi-arrow-left text-gray-600"></i>
+        </button>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800">Crear Grupo</h1>
+          <p class="text-gray-600">
+            Completa la información del grupo académico
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+    <form [formGroup]="form" (ngSubmit)="onGrupoSave()" class="space-y-6">
+      <app-card-with-title [title]="'Información del Grupo'">
+        <div class="space-y-6">
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-calendar text-blue-500"></i>
+              Información Académica
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div class="space-y-2">
+                <label
+                  for="ciclo_escolar"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Ciclo Escolar *
+                </label>
+                <p-autocomplete
+                  id="ciclo_escolar"
+                  formControlName="ciclo_escolar"
+                  [suggestions]="ciclos"
+                  optionLabel="nombre_ciclo"
+                  (completeMethod)="filterCiclos($event)"
+                  optionValue="id"
+                  placeholder="Seleccionar ciclo"
+                  class="w-full"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('ciclo_escolar')?.invalid &&
+                      form.get('ciclo_escolar')?.touched,
+                    'border-green-300':
+                      form.get('ciclo_escolar')?.valid &&
+                      form.get('ciclo_escolar')?.touched,
+                  }"
+                ></p-autocomplete>
+                <small
+                  *ngIf="
+                    form.get('ciclo_escolar')?.invalid &&
+                    form.get('ciclo_escolar')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El ciclo escolar es requerido
+                </small>
+              </div>
+
+
+              <div class="space-y-2">
+                <label
+                  for="docente"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Docente
+                </label>
+                <p-autocomplete
+                  id="docente"
+                  formControlName="docente"
+                  [suggestions]="docentes"
+                  optionLabel="nombre_completo"
+                  (completeMethod)="filterDocentes($event)"
+                  optionValue="id_docente"
+                  placeholder="Seleccionar docente"
+                  class="w-full"
+                ></p-autocomplete>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-tag text-blue-500"></i>
+              Detalles del Grupo
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <div class="space-y-2">
+                <label
+                  for="nombre_grupo"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Nombre del Grupo *
+                </label>
+                <input
+                  id="nombre_grupo"
+                  type="text"
+                  formControlName="nombre_grupo"
+                  pInputText
+                  placeholder="Ej: 1-F Pedro"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('nombre_grupo')?.invalid &&
+                      form.get('nombre_grupo')?.touched,
+                    'border-green-300':
+                      form.get('nombre_grupo')?.valid &&
+                      form.get('nombre_grupo')?.touched,
+                  }"
+                />
+                <small
+                  *ngIf="
+                    form.get('nombre_grupo')?.invalid &&
+                    form.get('nombre_grupo')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El nombre del grupo es requerido
+                </small>
+              </div>
+
+
+              <div class="space-y-2">
+                <label
+                  for="nivel"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Nivel *
+                </label>
+                <input
+                  id="nivel"
+                  type="text"
+                  formControlName="nivel"
+                  pInputText
+                  placeholder="Ej: 1"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('nivel')?.invalid && form.get('nivel')?.touched,
+                    'border-green-300':
+                      form.get('nivel')?.valid && form.get('nivel')?.touched,
+                  }"
+                />
+                <small
+                  *ngIf="
+                    form.get('nivel')?.invalid && form.get('nivel')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El nivel es requerido
+                </small>
+              </div>
+
+
+              <div class="space-y-2">
+                <label
+                  for="turno"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Turno *
+                </label>
+                <input
+                  id="turno"
+                  type="text"
+                  formControlName="turno"
+                  pInputText
+                  placeholder="Ej: Matutino"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('turno')?.invalid && form.get('turno')?.touched,
+                    'border-green-300':
+                      form.get('turno')?.valid && form.get('turno')?.touched,
+                  }"
+                />
+                <small
+                  *ngIf="
+                    form.get('turno')?.invalid && form.get('turno')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El turno es requerido
+                </small>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="border-b border-gray-200 pb-6">
+            <h2
+              class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="pi pi-chart-bar text-blue-500"></i>
+              Configuración
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <div class="space-y-2">
+                <label
+                  for="anio_escolar"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Año Escolar *
+                </label>
+                <p-inputNumber
+                  id="anio_escolar"
+                  formControlName="anio_escolar"
+                  mode="decimal"
+                  [min]="2020"
+                  [max]="2030"
+                  placeholder="Ej: 2024"
+                  class="w-full"
+                  inputClass="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [ngClass]="{
+                    'border-red-300':
+                      form.get('anio_escolar')?.invalid &&
+                      form.get('anio_escolar')?.touched,
+                    'border-green-300':
+                      form.get('anio_escolar')?.valid &&
+                      form.get('anio_escolar')?.touched,
+                  }"
+                ></p-inputNumber>
+                <small
+                  *ngIf="
+                    form.get('anio_escolar')?.invalid &&
+                    form.get('anio_escolar')?.touched
+                  "
+                  class="text-red-500 text-sm flex items-center gap-1"
+                >
+                  <i class="pi pi-exclamation-circle"></i>
+                  El año escolar es requerido
+                </small>
+              </div>
+
+
+              <div class="space-y-2">
+                <label
+                  for="periodo"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Periodo *
+                </label>
+                <input
+                  id="periodo"
+                  type="text"
+                  formControlName="periodo"
+                  pInputText
+                  placeholder="Ej: Agosto-Diciembre 2024"
+                  class="w-full px-4 py-3"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label
+                  for="capacidad_maxima"
+                  class="text-sm font-medium text-gray-700 flex items-center gap-1"
+                >
+                  Capacidad Máxima *
+                </label>
+                <p-inputNumber
+                  id="capacidad_maxima"
+                  formControlName="capacidad_maxima"
+                  [min]="1"
+                  [max]="3000"
+                  placeholder="Ej: 25"
+                  class="w-full"
+                  inputClass="w-full px-4 py-3"
+                ></p-inputNumber>
+              </div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="mt-6 flex flex-col sm:flex-row justify-end gap-3 pt-6">
+        <button
+          pButton
+          type="button"
+          severity="secondary"
+          icon="pi pi-arrow-left"
+          label="Regresar"
+          routerLink=".."
+          class="px-4 py-2"
+        ></button>
+
+        <button
+          pButton
+          type="submit"
+          severity="info"
+          icon="pi pi-check-square"
+          iconPos="right"
+          label="Guardar Grupo"
+          [disabled]="form.invalid"
+          class="px-4 py-2"
+        ></button>
+      </div>
+    </form>
+  </div>
+</div>

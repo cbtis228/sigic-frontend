@@ -1,0 +1,252 @@
+<div class="p-2 md:p-6 min-h-screen">
+  <form
+    [formGroup]="planEstudioForm"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!showSkeletons; else loadingTemplate"
+    class="max-w-5xl mx-auto"
+  >
+    <app-card-with-title [title]="'Información del Plan de Estudio'">
+      <div class="p-5 bg-blue-50/30">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="space-y-4">
+            <div class="field">
+              <label
+                for="nombre"
+                class="text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-indigo-100 text-indigo-600 rounded-full p-1 mr-2"
+                >
+                  <i class="pi pi-book text-xs"></i>
+                </span>
+                Nombre <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                formControlName="nombre"
+                id="nombre"
+                class="w-full"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  planEstudioForm.get('nombre')?.invalid &&
+                  planEstudioForm.get('nombre')?.touched
+                "
+              >
+                El nombre del plan de estudio es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="vigencia_inicio"
+                class="text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-teal-100 text-teal-600 rounded-full p-1 mr-2">
+                  <i class="pi pi-calendar-plus text-xs"></i>
+                </span>
+                Vigencia Inicio <span class="text-red-500 ml-1">*</span>
+              </label>
+              <p-datePicker
+                formControlName="vigencia_inicio"
+                id="vigencia_inicio"
+                [style]="{ width: '100%' }"
+                appendTo="body"
+                [ngClass]="{
+                  'p-invalid':
+                    planEstudioForm.get('vigencia_inicio')?.invalid &&
+                    planEstudioForm.get('vigencia_inicio')?.touched,
+                }"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  planEstudioForm.get('vigencia_inicio')?.invalid &&
+                  planEstudioForm.get('vigencia_inicio')?.touched
+                "
+              >
+                La vigencia de inicio es requerida
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="materias"
+                class="text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-amber-100 text-amber-600 rounded-full p-1 mr-2">
+                  <i class="pi pi-file-edit text-xs"></i>
+                </span>
+                Materias <span class="text-red-500 ml-1">*</span>
+              </label>
+              <app-materia-autocomplete
+                formControlName="materias"
+                [forceSelection]="true"
+                [multiple]="true"
+              ></app-materia-autocomplete>
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  planEstudioForm.get('materias')?.invalid &&
+                  planEstudioForm.get('materias')?.touched
+                "
+              >
+                Al menos una materia es requerida
+              </small>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="field">
+              <label
+                for="nivel"
+                class="text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-purple-100 text-purple-600 rounded-full p-1 mr-2"
+                >
+                  <i class="pi pi-caret-up text-xs"></i>
+                </span>
+                Nivel <span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                pInputText
+                type="text"
+                formControlName="nivel"
+                id="nivel"
+                class="w-full"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  planEstudioForm.get('nivel')?.invalid &&
+                  planEstudioForm.get('nivel')?.touched
+                "
+              >
+                El nivel del plan de estudio es requerido
+              </small>
+            </div>
+
+            <div class="field">
+              <label
+                for="vigencia_fin"
+                class="text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span class="bg-rose-100 text-rose-600 rounded-full p-1 mr-2">
+                  <i class="pi pi-calendar-minus text-xs"></i>
+                </span>
+                Vigencia Fin <span class="text-red-500 ml-1">*</span>
+              </label>
+              <p-datePicker
+                formControlName="vigencia_fin"
+                id="vigencia_fin"
+                [style]="{ width: '100%' }"
+                placeholder="Ej: 80"
+                appendTo="body"
+                [ngClass]="{
+                  'p-invalid':
+                    planEstudioForm.get('vigencia_fin')?.invalid &&
+                    planEstudioForm.get('vigencia_fin')?.touched,
+                }"
+              />
+              <small
+                class="text-red-500 text-xs"
+                *ngIf="
+                  planEstudioForm.get('vigencia_fin')?.invalid &&
+                  planEstudioForm.get('vigencia_fin')?.touched
+                "
+              >
+                La vigencia de fin es requerida
+              </small>
+            </div>
+            <div class="field">
+              <label
+                for="estatus"
+                class="text-sm font-semibold text-gray-700 mb-2 flex items-center"
+              >
+                <span
+                  class="bg-emerald-100 text-emerald-600 rounded-full p-1 mr-2"
+                >
+                  <i class="pi pi-check-circle text-xs"></i>
+                </span>
+                Estatus
+              </label>
+              <p-select
+                inputId="estatus"
+                formControlName="estatus"
+                [options]="estadosPlanEstudio"
+                optionLabel="label"
+                optionValue="value"
+                placeholder="Selecciona un estatus"
+                class="w-full"
+                appendTo="body"
+              >
+              </p-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-card-with-title>
+
+    <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8 px-2">
+      <button
+        pButton
+        type="button"
+        class="p-button-outlined p-button-secondary shadow-md hover:shadow-lg transition-all duration-300 py-3 px-5 rounded-xl"
+        icon="pi pi-arrow-left"
+        label="Regresar"
+        routerLink=".."
+      ></button>
+      <button
+        pButton
+        type="submit"
+        class="shadow-md hover:shadow-lg transition-all duration-300 py-3 px-5 rounded-xl"
+        icon="pi pi-check"
+        iconPos="right"
+        label="Guardar Cambios"
+        [disabled]="planEstudioForm.invalid"
+        [class]="{
+          'p-button-success': !planEstudioForm.invalid,
+          'p-button-disabled': planEstudioForm.invalid,
+          'opacity-100': !planEstudioForm.invalid,
+          'opacity-70': planEstudioForm.invalid,
+        }"
+      ></button>
+    </div>
+  </form>
+
+  <ng-template #loadingTemplate>
+    <div class="max-w-5xl mx-auto">
+      <app-card-with-title [title]="'Información del Materia'">
+        <div class="p-5 bg-blue-50/30">
+          <div class="animate-pulse">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="space-y-5">
+                <div *ngFor="let item of [1, 2, 3, 4]" class="space-y-3">
+                  <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div class="h-12 bg-gray-300 rounded-xl"></div>
+                </div>
+              </div>
+              <div class="space-y-5">
+                <div *ngFor="let item of [1, 2, 3, 4]" class="space-y-3">
+                  <div class="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div class="h-12 bg-gray-300 rounded-xl"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4 space-y-3">
+              <div class="h-4 bg-gray-300 rounded w-1/4"></div>
+              <div class="h-12 bg-gray-300 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+      </app-card-with-title>
+
+      <div class="flex justify-end gap-4 mt-8 px-2">
+        <div class="h-12 bg-gray-300 rounded-xl w-32 animate-pulse"></div>
+        <div class="h-12 bg-gray-300 rounded-xl w-40 animate-pulse"></div>
+      </div>
+    </div>
+  </ng-template>
+</div>

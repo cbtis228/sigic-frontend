@@ -1,0 +1,22 @@
+<div class="flex flex-col items-center gap-6 md:p-6">
+  <div
+    *ngIf="permissionsService.has$('academico.change_grupo') | async"
+    class="flex flex-row justify-between items-center w-full max-w-4xl mb-4 gap-4"
+  >
+    <h2 class="text-2xl font-bold text-gray-800 text-left sm:text-left">
+      Información General
+    </h2>
+    <p-button
+      label="Editar"
+      severity="info"
+      icon="pi pi-pencil"
+      routerLink="edit"
+    />
+  </div>
+
+  <div class="w-full md:w-1/2">
+    <app-grupo-general-info-card [grupo]="grupo" [loading]="!grupo">
+      ></app-grupo-general-info-card
+    >
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="p-4">
+  <app-edit-contactos-emergencia-alumno-card
+    [contactosList]="contactos"
+    [showSkeletons]="!contactos"
+    (updatedContactos)="onSubmit($event)"
+  ></app-edit-contactos-emergencia-alumno-card>
+</div>
